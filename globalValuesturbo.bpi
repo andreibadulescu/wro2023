@@ -1,0 +1,167 @@
+''''' Variabile globale '''''
+'''''''''''''''''''''''''''''
+' variabile determinate pe plansa pe care se executa misiunea
+' acestea sunt dependente de conditiile externe: constructia robotului, lumina, calitatea culorilor de pe plansa, 
+'                                                calitatea materialului plansei
+' se vor ajusta la inceput, in perioada de testare
+'''''''''''''''''''''''''''''
+
+'********************************* Variabile dependente de constructia robotului ********************************
+
+' motor_type - ce fel de motoare sunt folosite la navigare pe robot. Tip string, cu valori "large" / "medium"
+@motorType = "medium"
+
+' left_motor - portul motorului stanga folosit pentru navigare. Tip string, de obicei "B"
+@leftMotor = "B"
+
+' right_motor - portul motorului dreapta folosit pentru navigare. Tip string, de obicei "C"
+@rightMotor = "C"
+
+' stop_string - concatenam stringuri pentru porturile motoarelor. Necesar pentru functii precum Motor.GetCount sau
+'               Motor.Stop.
+@stopString = Text.Append(@leftMotor, @rightMotor) 
+
+' wheel_diameter - diametrul cauciului (exprimat in cm). Se regaseste pe lateralul cauciucului folosit
+@wheelDiameter = 8.16
+
+' wheel_distance - distanta (exprimata in cm) dintre cele doua roti. 
+'                  Se masoara de la exteriorul rotii stanga la interiorul rotii dreapta
+' ATENTIE LA ACEASTA MASURATOARE!!! Daca cauciucurile folosite sunt moi pe mijloc, contactul cu suprafata nu este 
+' realizat in intregime. Din acest motiv, pentru valoarea masurata, unghiurile nu se vor potrivi, vor fi mai mari.
+' In aceasta situatie, cu putin trial and error veti ajunge la o valoare care sa faca rotirile corect.
+' Se intampla frecvent pentru cauciucurile standard, de 5.6 cm si 6.88 cm.
+@wheelDistance = 17.5
+
+' wheel_ax_sensor_ax_distance - distanta (exprimata in cm) de la axul rotilor pana la mijlocul senzorilor
+'                               Reprezinta distanta necesare pe care robotul trebuie sa o parcurga pentru alinierea 
+'                               pe centrul de rotatie la rotirea la linie.
+@wheelAxSensorAxDistance = 8'9
+
+'********************************* Variabile folosite la algoritimi ********************************
+
+' line follower cu 2 senzori
+' left_sensor - portul senzorului stanga folosit pentru line follower
+@leftSensor = 1
+
+' right_sensor - portul senzorului dreapta folosit pentru line follower
+@rightSensor = 2
+
+' colorSensorLeft
+@leftReadSensor = 3
+
+' colorSensorRight
+@rightReadSensor = 4
+
+'line follower cu 1 senzor
+@lfSensor = 1
+
+' black - valoarea culorii negre de pe plansa
+@black = 20
+
+' white - valoarea culorii albe de pe plansa
+@white = 80
+
+' grey - valoarea intersectiei de culoare alb-negru. Folosit pentru a face line follower cu un singur senzor
+@grey = 17
+
+' blue - valoarea culorii negre de pe plansa, citita cu RGB in albastru
+@blackB = 60
+@blackBLF = 115
+
+' V0 - viteza de start a oricarui algoritm de line follower / move sync; minim 10, dar poate fi mai mare
+@V0 = 30
+
+' Vmax - viteza la care trebuie sa ajunga maxim algoritmul de line follower / move sync; maxim 90
+@Vmax = 90
+
+' kp_lf - valoarea optima de kp pentru algoritmul de line follower
+@kpSensor = 0.6
+
+' kd_lf - valoarea optima de kd pentru algoritmul de line follower
+@kdSensor = 1.5
+
+' custom values for LFReading
+@kpReadSensor = 0.4
+@kdReadSensor = 2
+@greyRead = 28
+@kiReadSensor = 0.0001
+
+
+@kpLFReadSensor = 1
+@kdLFReadSensor = 2
+
+' kp_move_sync - valoarea optima de kp pentru algoritmul de move_sync
+@kpMotor = 1
+
+' kd_move_sync - valoarea optima de kd pentru algoritmul de move_sync
+@kdMotor = 2
+
+@kpSpin = 3
+@kdSpin = 0
+
+' urmatorii parametrii sunt inclusi direct in functia Rotation2Black_Line
+' kp_rotation2black - valoarea optima de kp pentru algoritmul de rotire cu oprirea senzorilor la linia neagra
+@kpRotateToBlack2 = 1
+
+' kd_rotation2black - valoarea optima de kd pentru algoritmul de rotire cu oprirea senzorilor la linia neagra
+@kdRotateToBlack2 = 10
+
+' ki_rotation2black - valoarea optima de ki pentru algoritmul de rotire cu oprirea senzorilor la linia neagra
+@kiRotateToBlack2 = 0.01
+
+'timer_ki_rotation2black - timp de functionare al algoritmului PID din functia Rotation2Black_Line; valoare in ms
+@timerKiRotateToBlack2 = 200
+
+' AcceleratedEncoder - distanta (exprimate in grade de motor) pentru a accelera de la V0 la Vmax
+'                      valori uzuale : intre 50 si 150
+@acceleratedEncoder = 350
+
+' DeceleratedEncoder - distanta (exprimate in grade de motor) pentru a deccelera de la Vmax la V0
+'                      valori uzuale : intre 50 si 150
+@deceleratedEncoder = 350
+
+'******************** Variabile folosite pentru brate, executie in thread paralel ******************
+
+' coeficienti gheara
+@kpClaw = 0.8
+@kdClaw = 0.4
+
+' coeficienti lift
+@kpLiftRaise = 1
+@kpLiftLower = 0.8
+@kdLift = 1
+
+'********************************* Variabile folosite pentru culori ********************************
+
+' RGB max values
+@maxRed = 350
+@maxGreen = 252
+@maxBlue = 105
+
+'''''''''''''''''''''''''''''
+''''' Constante globale '''''
+'''''''''''''''''''''''''''''
+
+' Max run time in seconds
+@maxExecutionTime = 120
+
+' Enables debug functions
+@debug = "off"
+
+'Enables Sport+ mode
+@tutzanAMG = "on"
+
+' Required seconds to read properly an object
+@timeToRead = 0.3
+
+' General turning speed
+@turningSpeed = 40
+
+' General precision speed
+@precisionSpeed = 30
+
+' General cruising speed
+@cruisingSpeed = 85
+
+' Precision turning speed
+@precisionTurningSpeed = 30
