@@ -65,7 +65,7 @@
 @grey = 17
 
 ' blue - valoarea culorii negre de pe plansa, citita cu RGB in albastru
-@blackB = 60
+@blackB = 50
 @blackBLF = 115
 
 ' V0 - viteza de start a oricarui algoritm de line follower / move sync; minim 10, dar poate fi mai mare
@@ -82,9 +82,9 @@
 
 ' custom values for LFReading
 @kpReadSensor = 0.4
-@kdReadSensor = 2
+@kdReadSensor = 1.6
 @greyRead = 28
-@kiReadSensor = 0.0001
+@kiReadSensor = 0.001
 
 
 @kpLFReadSensor = 1
@@ -149,13 +149,13 @@
 @debug = "off"
 
 'Enables Sport+ mode
-@tutzanAMG = "on"
+@tutzanAMG = "off"
 
 ' Required seconds to read properly an object
 @timeToRead = 0.3
 
 ' General turning speed
-@turningSpeed = 40
+@turningSpeed = 30
 
 ' General precision speed
 @precisionSpeed = 30

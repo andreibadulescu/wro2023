@@ -252,8 +252,8 @@ EndSub
 color1 = 2
 color2 = 2
 cube1 = 0
-cube2 = 2
+cube2 = 0
 cube3 = 2
 cube4 = 3
 
-rotateToBlackRight(@turningSpeed, "on", "off", "off")
+rotateToBlackLeft(@turningSpeed, "on", "off", "off")

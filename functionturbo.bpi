@@ -846,7 +846,7 @@ Function rotateToBlackRight(in number Vmax,  in string endBrake, in string accel
   
   Sensor.SetMode(@leftSensor, 0)
   Sensor.SetMode(@rightSensor, 0)
-  robotSpin(2, "right", Vmax, "on")
+  'robotSpin(2, "right", Vmax, "on")
   'Program.Delay(1000)
   
   Time.Reset9()
@@ -861,8 +861,8 @@ Function rotateToBlackRight(in number Vmax,  in string endBrake, in string accel
     P = @kpReadSensor * error
     D = @kdReadSensor * (error - oldError)
     I = @kiReadSensor * isum
-    leftMotor = (-1) * (P + D + I)
-    rightMotor = (-1) * (P + D + I)
+    leftMotor = sens * (P + D + I)
+    rightMotor = sens * (P + D + I)
     oldError = error
     
     Motor.StartPower(@leftMotor, sens * leftMotor)
