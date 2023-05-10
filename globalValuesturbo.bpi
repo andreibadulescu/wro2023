@@ -35,7 +35,7 @@
 ' wheel_ax_sensor_ax_distance - distanta (exprimata in cm) de la axul rotilor pana la mijlocul senzorilor
 '                               Reprezinta distanta necesare pe care robotul trebuie sa o parcurga pentru alinierea 
 '                               pe centrul de rotatie la rotirea la linie.
-@wheelAxSensorAxDistance = 8'9
+@wheelAxSensorAxDistance = 11
 
 '********************************* Variabile folosite la algoritimi ********************************
 

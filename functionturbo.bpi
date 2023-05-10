@@ -725,7 +725,7 @@ Function robotSpin(in number degrees, in string direction, in number speed, in s
     EndIf
     
     If acceleration = "on" Then
-      V = (currentEncoder / @AcceleratedEncoder) * (speed - 40) + 40
+      V = (currentEncoder / @AcceleratedEncoder) * (speed - 50) + 50
       V = Math.Abs(V)
       
       If V > speed Then
@@ -737,11 +737,11 @@ Function robotSpin(in number degrees, in string direction, in number speed, in s
     
     If deceleration = "on" Then
       If encoder - currentEncoder < @DeceleratedEncoder Then
-        V = ((encoder - currentEncoder) / @DeceleratedEncoder) * (speed - 40) + 40
+        V = ((encoder - currentEncoder) / @DeceleratedEncoder) * (speed - 50) + 50
         V = Math.Abs(V)
         
-        If V < 40 Then
-          V = 40
+        If V < 50 Then
+          V = 50
         EndIf
         
       EndIf
@@ -1175,7 +1175,7 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
         EndIf
       EndIf
     Else
-      If blue >= 13 then
+      If blue >= 9 then
         blueRead++
       EndIf
     EndIf
