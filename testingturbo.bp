@@ -135,7 +135,7 @@ sub ClawStraight
 EndSub
 
 sub ClawCustomCubeIn
-  deltaD = 121
+  ClawCustomCubeInNoTimeout()
   wait(0.3)
 EndSub
 
@@ -145,11 +145,11 @@ sub ClawCustomCubeOut
 EndSub
 
 sub ClawCustomCubeInNoTimeout
-  deltaD = 121
+  deltaD = 120
 EndSub
 
 sub ClawCustomCubeOutNoTimeout
-  deltaD = 115
+  deltaD = 114
 endSub
 
 sub ClawLateralCube
@@ -258,26 +258,125 @@ sub lateralCube3
   rotateToBlackRight(@turningSpeed, "on", "off", "off")
 EndSub
 
-cube1pickup()
+color1 = 2
+color2 = 3
+cube1 = 0
+cube2 = 3
+cube3 = 2
+cube4 = 3
+
+If color1 = cube1 then
+  
+  cube1pickup()
+  cube1 = 0
+  
+ElseIf color1 = cube2 then
+  
+  cube2pickup()
+  cube2 = 0
+  
+ElseIf color1 = cube3 then
+  
+  cube3pickup()
+  cube3 = 0
+  
+Else
+  
+  cube4pickup()
+  cube4 = 0
+  
+EndIf
+
 lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "off", "off", "off")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-ClawOpenMax()
-wait(3)
-cube3pickup()
+LiftMaxNoTimeout()
+rotateToBlackRight(@turningSpeed, "on", "off", "off")
+lineFollower2(16, @cruisingSpeed, "on", "off", "off")
 lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "off", "off", "off")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+robotSpin(89, "right", @turningSpeed, "on")
+moveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
+LiftPutCubeOnBoat()
+ClawHugMode()
+
+' MOVING BIG BOAT TO 1st CROSS
+reverseMoveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
+ClawOpenMaxNoTimeout()
+LiftGrabBoatBack()
+moveSyncEncoder(2, @precisionSpeed, "on", "on", "on")
+ClawAirtight()
+wait(0.2)
+reverseMoveSyncEncoder(12, @cruisingSpeed, "on", "on", "on")
+robotArc(92, "right", "off", @cruisingSpeed, "off", "off", "on")
+lineFollower2(50, @cruisingSpeed, "on", "on", "on")
+
+' DELIVERING SECOND CUSTOM CUBE FOR BIG BOAT
 ClawOpenMax()
-wait(3)
-cube4pickup()
+LiftMax()
+reverseMoveSyncEncoder(5, @precisionSpeed, "on", "on", "on")
+robotSpin(90, "left", @turningSpeed, "on")
+
+If color2 = cube1 then
+  
+  cube1pickup()
+  cube1 = 0
+  
+ElseIf color2 = cube2 then
+  
+  cube2pickup()
+  cube2 = 0
+  
+ElseIf color2 = cube3 then
+  
+  cube3pickup()
+  cube3 = 0
+  
+Else
+  
+  cube4pickup()
+  cube4 = 0
+  
+EndIf
+
+LiftMaxNoTimeout()
 lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "off", "off", "off")
+'robotArc(92, "left", "off", @cruisingSpeed, "off", "off", "on")
 rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+lineFollower2(4, @precisionSpeed, "on", "on", "on")
+LiftPutCubeOnBoat()
+ClawHugMode()
+reverseMoveSyncEncoder(3, @precisionSpeed, "on", "on", "on")
+ClawOpenMaxNoTimeout()
+LiftMin()
+moveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
+ClawAirtight()
+
+' FINISHING CHALLENGE
+lineFollower2(85, @cruisingSpeed, "on", "on", "on")
 ClawOpenMax()
-wait(3)
-cube2pickup()
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "off", "off", "off")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-ClawOpenMax()
+robotArc(65, "left", "off", @cruisingSpeed, "off", "off", "off")
+moveSyncEncoder(17, @cruisingSpeed, "on", "on", "on")
+
+' PICKUP TESTING SEQUENCE
+
+'cube1pickup()
+'lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
+'rotateToBlackLeft(@turningSpeed, "off", "off", "off")
+'rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+'ClawOpenMax()
+'wait(3)
+'cube3pickup()
+'lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
+'rotateToBlackLeft(@turningSpeed, "off", "off", "off")
+'rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+'ClawOpenMax()
+'wait(3)
+'cube4pickup()
+'lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
+'rotateToBlackLeft(@turningSpeed, "off", "off", "off")
+'rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+'ClawOpenMax()
+'wait(3)
+'cube2pickup()
+'lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
+'rotateToBlackLeft(@turningSpeed, "off", "off", "off")
+'rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+'ClawOpenMax()
