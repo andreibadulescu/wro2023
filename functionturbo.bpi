@@ -792,17 +792,6 @@ Function rotateToBlackRight(in number Vmax,  in string endBrake, in string accel
   oldError = 0
   exitCondition = 1
   
-  acceleration = "off"
-  deceleration = "off"
-  
-  If acceleration = "on" then
-    acceleration = "on"
-  EndIf
-  
-  If deceleration = "on" then
-    deceleration = "on"
-  EndIf
-  
   sens = -1
   stopPort = @rightSensor
   
@@ -897,20 +886,9 @@ Function rotateToBlackLeft(in number Vmax,  in string endBrake, in string accele
   oldError = 0
   exitCondition = 1
   
-  acceleration = "off"
-  deceleration = "off"
-  
-  If acceleration = "on" then
-    acceleration = "on"
-  EndIf
-  
-  If deceleration = "on" then
-    deceleration = "on"
-  EndIf
-  
   sens = 1
   stopPort = @leftSensor
-    
+ 
   While exitCondition = 1
     
     leftEncoder = Math.Abs(Motor.GetCount(@leftMotor))
@@ -985,6 +963,145 @@ Function rotateToBlackLeft(in number Vmax,  in string endBrake, in string accele
     LCD.Write(10, 10, leftEncoder)
     LCD.Write(10, 20, rightEncoder)
   EndIf
+  
+  If endBrake = "on" Then
+    Motor.Stop(@stopString, "True")
+    Program.Delay(0.2)
+  EndIf
+  
+EndFunction
+
+' ----------
+
+Function arcToBlackRight(in number Vmax, in string endBrake, in string acceleration, in string deceleration)
+  
+  Sensor.SetMode(@leftSensor, 4)
+  Sensor.SetMode(@rightSensor, 4)
+  Motor.ResetCount(@stopString)
+  
+  oldError = 0
+  exitCondition = 1
+  
+  sens = -1
+  stopPort = @rightSensor
+  
+  While exitCondition = 1
+    
+    currentEncoder = Math.Abs(Motor.GetCount(@leftMotor))
+    
+    If @debug = "on" then
+      LCD.Clear()
+      LCD.Write(10, 10, currentEncoder)
+    EndIf
+    
+    If acceleration = "on" Then
+      V = (currentEncoder / @AcceleratedEncoder) * (Vmax - 40) + 40
+      V = Math.Abs(V)
+      
+      If V > Vmax Then
+        V = Vmax
+      EndIf
+    Else
+      V = Vmax
+    EndIf
+    
+    Motor.StartPower(@leftMotor, V * sens)
+    
+    If Sensor.ReadRawValue(stopPort, 2) < @blackB and currentEncoder > 100 then
+      exitCondition = 0
+    EndIf
+    
+  EndWhile
+  
+  Sensor.SetMode(@leftSensor, 0)
+  Sensor.SetMode(@rightSensor, 0)
+  Time.Reset9()
+  isum = 0
+  
+  while Time.Get9() < 250
+    s1 = Sensor.ReadPercent(@leftSensor)
+    s2 = Sensor.ReadPercent(@rightSensor)
+    
+    error = s2 - s1
+    isum = isum + error
+    P = @kpReadSensor * error
+    D = @kdReadSensor * (error - oldError)
+    I = @kiReadSensor * isum
+    leftMotor = sens * (P + D + I)
+    oldError = error
+    
+    Motor.StartPower(@rightMotor, sens * rightMotor)
+  EndWhile
+  
+  If endBrake = "on" Then
+    Motor.Stop(@stopString, "True")
+    Program.Delay(0.2)
+  EndIf
+  
+EndFunction
+
+Function arcToBlackLeft(in number Vmax, in string endBrake, in string acceleration, in string deceleration)
+  
+  Sensor.SetMode(@leftSensor, 4)
+  Sensor.SetMode(@rightSensor, 4)
+  Motor.ResetCount(@stopString)
+  
+  oldError = 0
+  exitCondition = 1
+  
+  sens = 1
+  stopPort = @leftSensor
+ 
+  While exitCondition = 1
+    
+    currentEncoder = Math.Abs(Motor.GetCount(@rightMotor))
+    
+    If @debug = "on" then
+      LCD.Clear()
+      LCD.Write(10, 10, currentEncoder)
+    EndIf
+    
+    If acceleration = "on" Then
+      V = (currentEncoder / @AcceleratedEncoder) * (Vmax - 40) + 40
+      V = Math.Abs(V)
+      
+      If V > Vmax Then
+        V = Vmax
+      EndIf
+    Else
+      V = Vmax
+    EndIf
+    
+    Motor.StartPower(@rightMotor, V)
+    
+    If Sensor.ReadRawValue(stopPort, 2) < @blackB and currentEncoder > 100 then
+      exitCondition = 0
+    EndIf
+    
+  EndWhile
+  
+  Sensor.SetMode(@leftSensor, 0)
+  Sensor.SetMode(@rightSensor, 0)
+  'robotSpin(2, "left", Vmax, "on")
+  'Program.Delay(1000)
+  
+  Time.Reset9()
+  isum = 0
+  
+  while Time.Get9() < 300
+    s1 = Sensor.ReadPercent(@leftSensor)
+    s2 = Sensor.ReadPercent(@rightSensor)
+    
+    error = s2 - s1
+    isum = isum + error
+    P = @kpReadSensor * error
+    D = @kdReadSensor * (error - oldError)
+    I = @kiReadSensor * isum
+    rightMotor = P + D + I
+    oldError = error
+    
+    Motor.StartPower(@rightMotor, sens * rightMotor)
+  EndWhile
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")

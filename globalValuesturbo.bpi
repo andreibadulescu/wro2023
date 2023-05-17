@@ -149,7 +149,7 @@
 @debug = "off"
 
 'Enables Sport+ mode
-@tutzanAMG = "off"
+@tutzanAMG = "on"
 
 ' Required seconds to read properly an object
 @timeToRead = 0.3
