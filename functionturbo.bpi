@@ -1175,7 +1175,7 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
         EndIf
       EndIf
     Else
-      If blue >= 9 then
+      If blue >= 16 then
         blueRead++
       EndIf
     EndIf

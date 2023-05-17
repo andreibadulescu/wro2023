@@ -176,8 +176,8 @@ sub cube1pickup
   LiftMinNoTimeout()
   ClawCustomCubeOutNoTimeout()
   lineFollower2(8, @precisionSpeed, "on", "on", "on")
-  robotArc(73, "left", "off", 60, "off", "off", "on")
-  robotArc(70, "right", "off", 60, "off", "off", "on")
+  robotArc(73, "left", "off", 50, "off", "off", "on")
+  robotArc(70, "right", "off", 50, "off", "off", "on")
   wait(0.2)
   moveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
   ClawCloseMax()
@@ -217,8 +217,8 @@ sub cube4pickup
   LiftMinNoTimeout()
   ClawCustomCubeOutNoTimeout()
   lineFollower2(8, @precisionSpeed, "on", "on", "on")
-  robotArc(70, "right", "off", 60, "off", "off", "on")
-  robotArc(72, "left", "off", 60, "off", "off", "on")
+  robotArc(68, "right", "off", 50, "off", "off", "on")
+  robotArc(70, "left", "off", 50, "off", "off", "on")
   wait(0.2)
   moveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
   ClawCloseMax()
@@ -238,7 +238,7 @@ sub lateralCube1
 EndSub
 
 sub lateralCube2
-  moveSyncEncoder(7, @precisionSpeed, "on", "on", "on")
+  moveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
   LiftMinNoTimeout()
   robotArc(90, "left", "on", 75, "off", "off", "on")
   ClawLateralCubeNoTimeout()
@@ -250,7 +250,7 @@ EndSub
 
 sub lateralCube3
   LiftMinNoTimeout()
-  robotArc(91, "left", "on", 75, "off", "off", "on")
+  robotArc(93, "left", "on", 75, "off", "off", "on")
   ClawLateralCubeNoTimeout()
   moveSyncEncoder(10, @precisionSpeed, "on", "on", "on")
   ClawCloseMax()
@@ -274,12 +274,13 @@ reverseMoveSyncEncoder(7, @cruisingSpeed, "on", "on", "on")
 rotateToBlackRight(@turningSpeed, "on", "off", "off")
 
 ' READING CUSTOM CUBES
-lineFollower2(20, @cruisingSpeed, "on", "off", "off")
+lineFollower2(25, @cruisingSpeed, "on", "off", "off")
 lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
 rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-lineFollower2(28, @cruisingSpeed, "on", "on", "on")
-robotSpin(92, "left", @precisionTurningSpeed, "on")
-wait(0.2)
+lineFollower2(30, @cruisingSpeed, "on", "on", "on")
+wait(0.25)
+robotSpin(89, "left", @precisionTurningSpeed, "on")
+wait(0.25)
 reverseMoveSyncEncoder(13, @cruisingSpeed, "on", "on", "on")
 readRGBWhileMoving("right", 6, 40, "off", cube3)
 readRGBWhileMoving("right", 6, 40, "off", cube2)
