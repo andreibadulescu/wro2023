@@ -872,7 +872,6 @@ Function rotateToBlackRight(in number Vmax,  in string endBrake, in string accel
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
-    Program.Delay(0.2)
   EndIf
   
 EndFunction
@@ -966,7 +965,6 @@ Function rotateToBlackLeft(in number Vmax,  in string endBrake, in string accele
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
-    Program.Delay(0.2)
   EndIf
   
 EndFunction
@@ -1030,12 +1028,11 @@ Function arcToBlackRight(in number Vmax, in string endBrake, in string accelerat
     leftMotor = sens * (P + D + I)
     oldError = error
     
-    Motor.StartPower(@rightMotor, sens * rightMotor)
+    Motor.StartPower(@leftMotor, sens * leftMotor)
   EndWhile
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
-    Program.Delay(0.2)
   EndIf
   
 EndFunction
@@ -1105,7 +1102,6 @@ Function arcToBlackLeft(in number Vmax, in string endBrake, in string accelerati
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
-    Program.Delay(0.2)
   EndIf
   
 EndFunction
