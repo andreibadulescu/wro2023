@@ -347,9 +347,9 @@ wait(0.2)
 
 ' PICKING UP CUSTOM CUBE FOR SMALL BOAT
 
-reverseMoveSyncEncoder(5, 40, "on", "on", "on")
+reverseMoveSyncEncoder(5, 50, "on", "on", "on")
 rotateToBlackLeft(@turningSpeed, "on", "on")
-reverseMoveSyncEncoder(5, 40, "on", "on", "on")
+reverseMoveSyncEncoder(5, 50, "on", "on", "on")
 lineFollower2(6, 40, "on", "off", "off")
 lineFollower2Intersection(40, "off", "on", "on")
 
@@ -389,13 +389,13 @@ EndIf
 
 lineFollower2Intersection(40, "off", "off", "off")
 LiftOverFlagNoTimeout()
-lineFollower2(26, 60, "off", "on", "on")
+lineFollower2(26, 70, "off", "on", "on")
 robotSpin(7, "left", @precisionTurningSpeed, "off", "off", "on")
 wait(0.2)
 ClawCustomCubeOut()
 robotSpin(8, "right", @precisionTurningSpeed, "off", "off", "on")
 wait(0.2)
-reverseMoveSyncEncoder(5, 30, "off", "off", "on")
+reverseMoveSyncEncoder(5, 40, "on", "on", "on")
 ClawOpenMax()
 
 ' MOVING SMALL BOAT TO 1st CROSS

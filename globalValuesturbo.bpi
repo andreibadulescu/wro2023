@@ -158,7 +158,7 @@
 @timeToRead = 0.3
 
 ' General turning speed
-@turningSpeed = 50
+@turningSpeed = 60
 
 ' General precision speed
 @precisionSpeed = 30
