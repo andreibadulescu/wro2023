@@ -271,7 +271,7 @@ LCD.Write(10, 10, color1)
 LCD.Write(10, 20, color2)
 
 reverseMoveSyncEncoder(7, @cruisingSpeed, "on", "on", "on")
-rotateToBlackRight(@turningSpeed, "on", "off", "off")
+rotateToBlackRight(@turningSpeed, "on", "off")
 
 ' READING CUSTOM CUBES
 lineFollower2(25, @cruisingSpeed, "on", "off", "off")
@@ -528,4 +528,4 @@ Speaker.Tone(100, 2000, 200)
 Program.Delay(400)
 Speaker.Tone(100, 2000, 200)
 
-wait(30000)
+wait(15)

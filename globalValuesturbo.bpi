@@ -22,7 +22,7 @@
 @stopString = Text.Append(@leftMotor, @rightMotor) 
 
 ' wheel_diameter - diametrul cauciului (exprimat in cm). Se regaseste pe lateralul cauciucului folosit
-@wheelDiameter = 8.16
+@wheelDiameter = 8.5
 
 ' wheel_distance - distanta (exprimata in cm) dintre cele doua roti. 
 '                  Se masoara de la exteriorul rotii stanga la interiorul rotii dreapta
@@ -86,6 +86,9 @@
 @greyRead = 28
 @kiReadSensor = 0.001
 
+@kpArcMove = 5
+@kdArcMove = 1
+
 
 @kpLFReadSensor = 1
 @kdLFReadSensor = 2
@@ -114,11 +117,11 @@
 
 ' AcceleratedEncoder - distanta (exprimate in grade de motor) pentru a accelera de la V0 la Vmax
 '                      valori uzuale : intre 50 si 150
-@acceleratedEncoder = 350
+@acceleratedEncoder = 200
 
 ' DeceleratedEncoder - distanta (exprimate in grade de motor) pentru a deccelera de la Vmax la V0
 '                      valori uzuale : intre 50 si 150
-@deceleratedEncoder = 350
+@deceleratedEncoder = 200
 
 '******************** Variabile folosite pentru brate, executie in thread paralel ******************
 
@@ -149,13 +152,13 @@
 @debug = "off"
 
 'Enables Sport+ mode
-@tutzanAMG = "off"
+@tutzanAMG = "on"
 
 ' Required seconds to read properly an object
 @timeToRead = 0.3
 
 ' General turning speed
-@turningSpeed = 30
+@turningSpeed = 60
 
 ' General precision speed
 @precisionSpeed = 30
