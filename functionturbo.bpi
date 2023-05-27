@@ -1069,6 +1069,10 @@ Function rotateToBlackRight(in number Vmax, in string endBrake, in string accele
   sens = -1
   stopPort = @rightSensor
   
+  If Vmax > 60 Then
+    Vmax = 60
+  EndIf
+  
   While exitCondition = 1
     
     leftEncoder = Math.Abs(Motor.GetCount(@leftMotor))
@@ -1145,6 +1149,7 @@ Function rotateToBlackRight(in number Vmax, in string endBrake, in string accele
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
+    wait(0.2)
   EndIf
   
 EndFunction
@@ -1160,6 +1165,10 @@ Function rotateToBlackLeft(in number Vmax, in string endBrake, in string acceler
   
   sens = 1
   stopPort = @leftSensor
+  
+  If Vmax > 60 Then
+    Vmax = 60
+  EndIf
   
   While exitCondition = 1
     
@@ -1238,6 +1247,7 @@ Function rotateToBlackLeft(in number Vmax, in string endBrake, in string acceler
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
+    wait(0.2)
   EndIf
   
 EndFunction
