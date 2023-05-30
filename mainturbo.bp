@@ -291,7 +291,7 @@ sub secondCube4
   moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
   reverseMoveSyncEncoder(7, 50, "on", "on", "on")
-  arcMove2(12, 25, "left", -75, "on", "on", "on")
+  arcMove2(12, 30, "left", -75, "on", "on", "on")
   arcMove2(12, 40, "right", -75, "on", "on", "on")
   arcMove2(13, 90, "left", -75, "on", "on", "on")
   reverseMoveSyncEncoder(10, 60, "on", "on", "on")
@@ -359,7 +359,7 @@ ClawHugMode()
 moveSyncEncoder(6, 40, "on", "on", "on")
 ClawCloseMax()
 reverseMoveSyncEncoder(2, 40, "on", "on", "on")
-robotSpin(122, "left", 50, "on", "on", "on")
+robotSpin(123, "left", 50, "on", "on", "on")
 moveSyncEncoder(30, 75, "on", "on", "off")
 readRGBWhileMoving("right", 6, 40, "off", cube4)
 readRGBWhileMoving("right", 6, 40, "off", cube3)
@@ -374,6 +374,11 @@ ClawCloseMax()
 reverseMoveSyncEncoder(24, @cruisingSpeed, "on", "on", "on")
 
 cube1 = 10 - cube2 - cube3 - cube4
+
+cube1 = 3
+cube2 = 2
+cube3 = 3
+cube4 = 2
 
 LCD.Clear()
 LCD.Write(10, 10, cube1)
