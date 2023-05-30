@@ -9,10 +9,10 @@ deltaD = 0
 
 If @tutzanAMG = "on" then
   
-  @cruisingSpeed += 15
-  @turningSpeed += 25
-  @precisionSpeed += 5
-  @precisionTurningSpeed += 5
+  @cruisingSpeed += 10
+  @turningSpeed += 10
+  @precisionSpeed += 0
+  @precisionTurningSpeed += 0
   
 EndIf
 
@@ -70,7 +70,7 @@ sub LiftMin
 EndSub
 
 Sub LiftMinNoTimeout
-  deltaA = -5
+  deltaA = -18
 EndSub
 
 sub LiftPutCubeOnBoat
@@ -79,7 +79,16 @@ sub LiftPutCubeOnBoat
 EndSub
 
 sub LiftPutCubeOnBoatNoTimeout
-  deltaA = -72
+  deltaA = -75
+EndSub
+
+sub LiftPlaceRedContainerNoTimeout
+  deltaA = -70
+EndSub
+
+sub LiftDropRedContainer
+  deltaA = -22
+  wait(0.3)
 EndSub
 
 sub LiftGrabBoatSide
@@ -88,7 +97,7 @@ sub LiftGrabBoatSide
 EndSub
 
 sub LiftGrabBoatSideNoTimeout
-  deltaA = -30 
+  deltaA = -33 
 EndSub
 
 sub LiftGrabBoatBack
@@ -97,12 +106,16 @@ sub LiftGrabBoatBack
 EndSub
 
 sub LiftGrabRedContainer
-  deltaA = -63
+  deltaA = -61
   wait(0.3)
 EndSub
 
+sub LiftOverFlagNoTimeout
+  deltaA = -90
+EndSub
+
 sub LiftOverFlag
-  deltaA = -82
+  LiftOverFlagNoTimeout()
   wait(0.4)
 EndSub
 
@@ -116,16 +129,21 @@ sub ClawOpenMaxNoTimeout
 EndSub
 
 sub ClawCloseMax
-  deltaD = 220
+  deltaD = 200
   wait(0.3)
 EndSub
 
 sub ClawCloseMaxNoTimeout
-  deltaD = 220
+  deltaD = 200
 EndSub
 
 sub ClawAirtight
-  deltaD = 350
+  deltaD = 400
+  wait(0.3)
+EndSub
+
+sub ClawAirtightSmallBoat
+  deltaD = 300
   wait(0.3)
 EndSub
 
@@ -145,7 +163,7 @@ sub ClawCustomCubeOut
 EndSub
 
 sub ClawCustomCubeInNoTimeout
-  deltaD = 122
+  deltaD = 120
 EndSub
 
 sub ClawCustomCubeOutNoTimeout
@@ -170,357 +188,376 @@ sub ClawHugModeNoTimeout
   deltaD = 90
 EndSub
 
-'de la intersecetie pana la locu de unde incep pickup-urile sunt 12 cm
+sub ClawArcCubePickupNoTimeout
+  deltaD = 80
+EndSub
 
-sub cube1pickup
-  LiftMinNoTimeout()
+sub firstCube1
   ClawCustomCubeOutNoTimeout()
-  lineFollower2(8, @precisionSpeed, "on", "on", "on")
-  robotArc(73, "left", "off", 50, "off", "off", "on")
-  robotArc(70, "right", "off", 50, "off", "off", "on")
-  wait(0.2)
-  moveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
+  LiftMinNoTimeout()
+  lineFollower2(10, 50, "on", "on", "on")
+  arcMove2(12, 54, "left", 75, "on", "on", "on")
+  arcMove2(12, 40, "right", 75, "on", "on", "on")
+  moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
-  robotArc(152, "right", "on", 60, "off", "off", "on")
-  lineFollower2(10, @cruisingSpeed, "on", "off", "off")
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(12, 40, "right", -75, "on", "on", "on")
+  arcMove2(12, 54, "left", -75, "on", "on", "on")
 EndSub
 
-sub cube2pickup
-  LiftMinNoTimeout()
+sub firstCube2
   ClawCustomCubeInNoTimeout()
-  lineFollower2(12, @precisionSpeed, "on", "on", "on")
-  robotArc(40, "left", "off", 50, "off", "off", "on")
-  robotArc(39, "right", "off", 50, "off", "off", "on")
-  wait(0.2)
-  moveSyncEncoder(9, @precisionSpeed, "on", "on", "on")
+  LiftMinNoTimeout()
+  lineFollower2(22, @cruisingSpeed, "on", "on", "on")
+  arcMove2(14, 12, "left", 75, "on", "on", "on")
+  moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
-  reverseMoveSyncEncoder(7, @precisionSpeed, "on", "on", "on")
-  rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-  lineFollower2(10, @cruisingSpeed, "on", "off", "off")
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(14, 12, "left", -75, "on", "on", "on")
+  reverseMoveSyncEncoder(12, 60, "on", "on", "on")
 EndSub
 
-sub cube3pickup
-  LiftMinNoTimeout()
+sub firstCube3
   ClawCustomCubeInNoTimeout()
-  lineFollower2(12, @precisionSpeed, "on", "on", "on")
-  robotArc(39, "right", "off", 50, "off", "off", "on")
-  robotArc(41.5, "left", "off", 50, "off", "off", "on")
-  wait(0.2)
-  moveSyncEncoder(9, @precisionSpeed, "on", "on", "on")
+  LiftMinNoTimeout()
+  lineFollower2(22, @cruisingSpeed, "on", "on", "on")
+  arcMove2(14, 10, "right", 75, "on", "on", "on")
+  moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
-  reverseMoveSyncEncoder(7, @precisionSpeed, "on", "on", "on")
-  rotateToBlackRight(@turningSpeed, "on", "off", "off")
-  lineFollower2(10, @cruisingSpeed, "on", "off", "off")
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(14, 10, "right", -75, "on", "on", "on")
+  reverseMoveSyncEncoder(12, 60, "on", "on", "on")
 EndSub
 
-sub cube4pickup
-  LiftMinNoTimeout()
+sub firstCube4
   ClawCustomCubeOutNoTimeout()
-  lineFollower2(8, @precisionSpeed, "on", "on", "on")
-  robotArc(68, "right", "off", 50, "off", "off", "on")
-  robotArc(70, "left", "off", 50, "off", "off", "on")
-  wait(0.2)
-  moveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
+  LiftMinNoTimeout()
+  lineFollower2(12, 50, "on", "on", "on")
+  arcMove2(12, 40, "right", 75, "on", "on", "on")
+  arcMove2(12, 25, "left", 75, "on", "on", "on")
+  moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
-  robotArc(152, "left", "on", 60, "off", "off", "on")
-  lineFollower2(10, @cruisingSpeed, "on", "off", "off")
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(12, 25, "left", -75, "on", "on", "on")
+  arcMove2(12, 40, "right", -75, "on", "on", "on")
+  reverseMoveSyncEncoder(2, 40, "on", "on", "on")
 EndSub
 
-sub lateralCube1
-  moveSyncEncoder(14, @precisionSpeed, "on", "on", "on")
-  LiftMinNoTimeout()
-  robotArc(90, "left", "on", 75, "off", "off", "on")
-  ClawLateralCubeNoTimeout()
-  moveSyncEncoder(10, @precisionSpeed, "on", "on", "on")
+sub secondCube1
+  lineFollower2(2, 30, "off", "off", "on")
+  arcMove2(12, 40, "left", 75, "on", "on", "on")
+  arcMove2(12, 25, "right", 75, "on", "on", "on")
+  wait(0.3)
+  ClawHugMode()
+  moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
-  robotArc(100, "right", "on", 75, "off", "off", "on")
-  rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(12, 25, "right", -75, "on", "on", "on")
+  arcMove2(12, 40, "left", -75, "on", "on", "on")
+  arcMove2(13, 90, "left", -75, "on", "on", "on")
+  reverseMoveSyncEncoder(10, 60, "on", "on", "on")
 EndSub
 
-sub lateralCube2
-  moveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
-  LiftMinNoTimeout()
-  robotArc(90, "left", "on", 75, "off", "off", "on")
-  ClawLateralCubeNoTimeout()
-  moveSyncEncoder(10, @precisionSpeed, "on", "on", "on")
+sub secondCube2
+  lineFollower2(12, 50, "on", "on", "on")
+  arcMove2(14, 12, "left", 75, "on", "on", "on")
+  wait(0.3)
+  ClawHugMode()
+  moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
-  reverseMoveSyncEncoder(8, @precisionSpeed, "on", "on", "on")
-  rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(14, 12, "left", -75, "on", "on", "on")
+  arcMove2(22, 90, "left", -75, "on", "on", "on")
 EndSub
 
-sub lateralCube3
-  LiftMinNoTimeout()
-  robotArc(93, "left", "on", 75, "off", "off", "on")
-  ClawLateralCubeNoTimeout()
-  moveSyncEncoder(10, @precisionSpeed, "on", "on", "on")
+sub secondCube3
+  lineFollower2(12, @cruisingSpeed, "on", "on", "on")
+  arcMove2(14, 10, "right", 75, "on", "on", "on")
+  wait(0.3)
+  ClawHugMode()
+  moveSyncEncoder(7, 50, "on", "on", "on")
   ClawCloseMax()
-  reverseMoveSyncEncoder(8, @precisionSpeed, "on", "on", "on")
-  rotateToBlackRight(@turningSpeed, "on", "off", "off")
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(14, 10, "right", -75, "on", "on", "on")
+  arcMove2(22, 90, "left", -75, "on", "on", "on")
 EndSub
+
+sub secondCube4
+  lineFollower2(2, 30, "off", "off", "on")
+  arcMove2(12, 40, "right", 75, "on", "on", "on")
+  arcMove2(12, 25, "left", 75, "on", "on", "on")
+  wait(0.3)
+  ClawHugMode()
+  moveSyncEncoder(7, 50, "on", "on", "on")
+  ClawCloseMax()
+  reverseMoveSyncEncoder(7, 50, "on", "on", "on")
+  arcMove2(12, 25, "left", -75, "on", "on", "on")
+  arcMove2(12, 40, "right", -75, "on", "on", "on")
+  arcMove2(13, 90, "left", -75, "on", "on", "on")
+  reverseMoveSyncEncoder(10, 60, "on", "on", "on")
+EndSub
+
+' ----- CAZURI -----
+
+' GGBB
+' GBGB
+' GBBG
+' BBGG
+' BGBG
+' BGGB
+
+' ----- RUNTIME -----
 
 ' PUSHING BIG BOAT
 LiftMaxNoTimeout()
 moveSyncEncoder(9, @cruisingSpeed, "on", "off", "off")
 lineFollower2(14.5, 60, "off", "off", "off")
 readRGBWhileMoving("left", 4, 50, "off", color1)
-readRGBWhileMoving("left", 4, 50, "off", color2)
-moveSyncEncoderTimeout(10, 50, 0.7, "on", "on", "on")
+readRGBWhileMoving("left", 4, 40, "off", color2)
+moveSyncEncoderTimeout(12, 40, 0.8, "on", "on", "on")
+
+If color2 = 2 and color1 = 3 then
+  color1 = 2
+  color2 = 3
+EndIf
 
 LCD.Clear() ' 2 - blue, 3 - green
 LCD.Write(10, 10, color1)
 LCD.Write(10, 20, color2)
 
-reverseMoveSyncEncoder(7, @cruisingSpeed, "on", "on", "on")
-rotateToBlackRight(@turningSpeed, "on", "off")
+reverseMoveSyncEncoder(9, @cruisingSpeed, "on", "on", "on")
+rotateToBlackRight(@turningSpeed, "on", "on")
 
-' READING CUSTOM CUBES
-lineFollower2(25, @cruisingSpeed, "on", "off", "off")
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-lineFollower2(30, @cruisingSpeed, "on", "on", "on")
-wait(0.25)
-robotSpin(89, "left", @precisionTurningSpeed, "on")
-wait(0.25)
-reverseMoveSyncEncoder(13, @cruisingSpeed, "on", "on", "on")
+' GRABBING RED CONTAINER AND PUTTING IT NEXT TO FIRST X CROSS 
+LiftGrabRedContainer()
+lineFollower2(15, @cruisingSpeed, "on", "on", "off")
+arcMove2(14, 185, "left", 75, "on", "on", "on")
+ClawCloseMaxNoTimeout()
+wait(0.2)
+LiftMax()
+wait(0.2)
+arcMove2(14, 160, "left", -75, "on", "on", "on")
+rotateToBlackRight(@turningSpeed, "on", "off")
+LiftDropRedContainer()
+ClawOpenMax()
+LiftMax()
+
+' GRABBING WHITE CUBES
+
+rotateToBlackLeft(@turningSpeed, "on", "off")
+ClawCustomCubeOutNoTimeout()
+LiftMinNoTimeout()
+lineFollower2(10, @cruisingSpeed, "on", "off", "off")
+lineFollower2Intersection(@cruisingSpeed, "off", "off", "off")
+lineFollower2(16, @cruisingSpeed, "off", "on", "on")
+arcMove2(34, 90, "left", 75, "on", "on", "on")
+moveSyncEncoder(2, 40, "on", "on", "on")
+ClawCloseMax()
+reverseMoveSyncEncoder(5, 50, "on", "on", "on")
+robotSpin(20, "right", 50, "on", "on", "on")
+ClawHugMode()
+moveSyncEncoder(6, 40, "on", "on", "on")
+ClawCloseMax()
+reverseMoveSyncEncoder(4, 40, "on", "on", "on")
+robotSpin(122, "left", 50, "on", "on", "on")
+moveSyncEncoder(30, 75, "on", "on", "off")
+readRGBWhileMoving("right", 6, 40, "off", cube4)
 readRGBWhileMoving("right", 6, 40, "off", cube3)
 readRGBWhileMoving("right", 6, 40, "off", cube2)
-readRGBWhileMoving("right", 6, 40, "on", cube1)
+LiftPutCubeOnBoatNoTimeout()
+moveSyncEncoder(29, @cruisingSpeed, "on", "on", "on")
+wait(0.3)
+ClawHugMode()
+reverseMoveSyncEncoder(6, 60, "on", "on", "on")
+LiftMin()
+ClawCloseMax()
+reverseMoveSyncEncoder(24, @cruisingSpeed, "on", "on", "on")
 
-cube4 = 10 - cube1 - cube3 - cube2
+cube1 = 10 - cube2 - cube3 - cube4
 
-LCD.Write(20, 10, cube1)
-LCD.Write(20, 20, cube2)
-LCD.Write(20, 30, cube3)
-LCD.Write(20, 40, cube4)
+LCD.Clear()
+LCD.Write(10, 10, cube1)
+LCD.Write(10, 20, cube2)
+LCD.Write(10, 30, cube3)
+LCD.Write(10, 40, cube4)
+
+rotateToBlackLeft(@turningSpeed, "on", "on")
+lineFollower2(10, 60, "on", "off", "off")
+lineFollower2Intersection(40, "off", "on", "on")
+robotSpin(75, "left", 80, "on", "off", "off")
+rotateToBlackLeft(50, "on", "off")
 
 If color1 = color2 then
   
   If cube1 <> color1 then
     
-    lateralCube1()
+    firstCube1()
     cube1 = 0
     
   ElseIf cube2 <> color1 then
     
-    lateralCube2()
+    firstCube2()
     cube2 = 0
     
   Else
     
-    lateralCube3()
+    firstCube3()
     cube3 = 0
     
   EndIf
   
 Else
   
-  lateralCube1()
+  firstCube1()
   cube1 = 0
   
 EndIf
 
-' DELIVERING CUSTOM CUBE TO SMALL BOAT
-wait(0.2)
-lineFollower2(6, 30, "on", "off", "off")
-lineFollower2Intersection(@precisionSpeed, "off", "off", "off")
-Speaker.Tone(100, 2000, 300)
+rotateToBlackLeft(@turningSpeed, "on", "on")
+reverseMoveSyncEncoder(10, 60, "on", "on", "on")
+lineFollower2(7, 60, "on", "off", "off")
+lineFollower2Intersection(60, "off", "off", "off")
 LiftPutCubeOnBoatNoTimeout()
-lineFollower2(25, @cruisingSpeed, "off", "on", "on")
+lineFollower2(24, 60, "off", "on", "on")
+robotSpin(9, "left", @precisionTurningSpeed, "off", "off", "on")
 wait(0.2)
-robotSpin(5, "right", @precisionTurningSpeed, "on")
-wait(0.2)
-ClawOpenMax()
-robotSpin(5, "left", @precisionTurningSpeed, "on")
-wait(0.2)
-
-' DELIVERING SMALL BOAT TO COASTLINE
-reverseMoveSyncEncoder(5, 30, "off", "off", "on")
-LiftGrabBoatSide()
-ClawAirtight()
-reverseMoveSyncEncoder(12, @cruisingSpeed, "on", "on", "on")
-rotateToBlackLeft(50, "off", "off", "on")
-lineFollower2(35, @cruisingSpeed, "on", "off", "off")
-lineFollower2Intersection(@cruisingSpeed, "off", "off", "off")
-lineFollower2(12, @cruisingSpeed, "off", "on", "on")
-ClawOpenMax()
-
-' DELIVERING WHITE CUBE TO SMALL BOAT
-reverseMoveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-ClawLateralCubeNoTimeout()
-lineFollower2(20, @cruisingSpeed, "on", "on", "on")
-LiftMinNoTimeout()
-robotSpin(10, "left", @turningSpeed, "on")
-moveSyncEncoder(8, @precisionSpeed, "on", "on", "on")
-ClawCloseMax()
-reverseMoveSyncEncoder(7, @precisionSpeed, "on", "on", "on")
-robotSpin(40, "left", @turningSpeed, "off")
-rotateToBlackLeft(@turningSpeed, "on", "off", "on")
-lineFollower2(10, @cruisingSpeed, "on", "off", "off")
-LiftMaxNoTimeout()
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-lineFollower2(8, @cruisingSpeed, "on", "on", "on")
-robotSpin(5, "left", @precisionTurningSpeed, "on")
-LiftOverFlag()
-ClawHugMode()
-LiftMax()
-reverseMoveSyncEncoder(8, @cruisingSpeed, "on", "on", "on")
-
-' GRABBING RED CONTAINER
-robotSpin(100, "right", @turningSpeed, "off")
-rotateToBlackRight(@turningSpeed, "on", "off", "on")
-lineFollower2(38, @cruisingSpeed, "on", "off", "off")
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackRight(@turningSpeed, "on", "off", "off")
-lineFollower2(26, @cruisingSpeed, "on", "on", "on")
-wait(0.2)
-robotSpin(88, "left", @turningSpeed, "on")
-LiftGrabRedContainer()
-ClawOpenMaxNoTimeout()
-moveSyncEncoder(31, @cruisingSpeed, "on", "on", "on")
-ClawCloseMax()
-LiftMax()
-
-' DELIVERING SMALL BOAT AND RED CONTAINER
-reverseMoveSyncEncoder(31, @cruisingSpeed, "on", "on", "on")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-lineFollower2(8, @cruisingSpeed, "on", "on", "on")
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-lineFollower2(65, @cruisingSpeed, "on", "on", "off")
-lineFollower2(6, @precisionSpeed, "on", "off", "off")
-lineFollower2(47, @cruisingSpeed, "off", "on", "off")
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-moveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
-reverseMoveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
-rotateToBlackRight(@turningSpeed, "on", "off", "off")
-LiftPutCubeOnBoat()
-lineFollower2(16, @cruisingSpeed, "on", "on", "on")
+ClawCustomCubeOut()
+reverseMoveSyncEncoder(6, 50, "on", "on", "on")
 ClawOpenMax()
 LiftMin()
-lineFollower2(10, @cruisingSpeed, "off", "off", "on")
-
-' DELIVERING WHITE CUBE FOR BIG BOAT
-reverseMoveSyncEncoder(30, @cruisingSpeed, "on", "on", "on")
-rotateToBlackRight(@turningSpeed, "on", "off", "off")
-lineFollower2(60, @cruisingSpeed, "on", "off", "off")
-lineFollower2Intersection(@precisionSpeed, "on", "on", "on")
-rotateToBlackRight(@turningSpeed, "on", "off", "off")
-LiftMinNoTimeout()
-ClawOpenMaxNoTimeout()
-lineFollower2(28, @cruisingSpeed, "on", "on", "on")
-robotSpin(16, "right", @turningSpeed, "on")
-moveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
 ClawCloseMax()
-reverseMoveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
-robotSpin(105, "left", 30, "on")
-LiftPutCubeOnBoat()
-moveSyncEncoder(85, @cruisingSpeed, "on", "on", "on")
-ClawHugMode()
+LiftOverFlag()
+robotSpin(6, "right", 40, "off", "off", "on")
+moveSyncEncoder(6, 50, "on", "on", "on")
+wait(0.2)
+ClawCustomCubeOut()
+robotSpin(4, "left", 40, "off", "off", "on")
+reverseMoveSyncEncoder(5, 40, "on", "on", "on")
+ClawOpenMax()
 
-' DELIVERING FIRST CUSTOM CUBE FOR BIG BOAT
-reverseMoveSyncEncoder(33, @cruisingSpeed, "on", "on", "on")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-lineFollower2(5, @precisionSpeed, "on", "off", "off")
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-robotSpin(45, "left", @turningSpeed, "off")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
+' MOVING SMALL BOAT TO 1st CROSS
+
+LiftGrabBoatSide()
+moveSyncEncoder(3, 40, "on", "on", "on")
+ClawAirtightSmallBoat()
+arcMove2(14, 95, "right", -60, "on", "on", "on")
+ClawOpenMax()
+
+' PICKING UP RED CONTAINER AND FINISHING THE 1st DELIVERY
+
+LiftMax()
+rotateToBlackRight(@turningSpeed, "on", "off")
+LiftMinNoTimeout()
+lineFollower2(20, @cruisingSpeed, "on", "on", "on")
+ClawCloseMax()
+LiftGrabBoatSideNoTimeout()
+rotateToBlackLeft(@turningSpeed, "on", "off")
+lineFollower2(18, @cruisingSpeed, "on", "on", "on")
+lineFollower2(30, @cruisingSpeed, "on", "off", "off")
+lineFollower2Intersection(@cruisingSpeed, "off", "off", "off")
+lineFollower2(44, @cruisingSpeed, "off", "on", "on")
+arcMove2(30, 70, "right", 75, "on", "off", "off")
+LiftPlaceRedContainerNoTimeout()
+arcMove2Timer(30, 15, "right", 75, "off", "on", "on", 1)
+ClawOpenMax()
+arcMove2(28, 30, "right", -75, "on", "off", "off")
+LiftMaxNoTimeout()
+arcMove2(28, 50, "right", -75, "off", "on", "on")
+rotateToBlackLeft(@turningSpeed, "on", "on")
+
+' MOVING BIG BOAT TO THE FURTHEST BUOY
+
+LiftGrabBoatBack()
+lineFollower2(100, @cruisingSpeed, "on", "on", "off")
+lineFollower2Intersection(30, "off", "on", "on")
+robotSpin(93, "right", 50, "on", "on", "on")
+LiftMin()
+moveSyncEncoderTimeout(2, 40, 0.5, "on", "on", "on")
+ClawAirtight()
+wait(0.25)
+reverseMoveSyncEncoder(30, 60, "on", "on", "on")
+arcMove2(20, 100, "right", 75, "off", "off", "off")
+lineFollower2(15, @cruisingSpeed, "on", "off", "off")
+lineFollower2Intersection(@cruisingSpeed, "off", "off", "off")
+lineFollower2(14, @cruisingSpeed, "off", "on", "on")
+ClawOpenMax()
+reverseMoveSyncEncoder(8, 40, "on", "on", "on")
+wait(0.25)
+rotateToBlackLeft(@turningSpeed, "on", "on")
+
+' PICKING UP THE REMAINING CUSTOM CUBES 
 
 If color1 = cube1 then
   
-  cube1pickup()
+  firstCube1()
   cube1 = 0
   
 ElseIf color1 = cube2 then
   
-  cube2pickup()
+  firstCube2()
   cube2 = 0
   
 ElseIf color1 = cube3 then
   
-  cube3pickup()
+  firstCube3()
   cube3 = 0
   
 Else
   
-  cube4pickup()
+  firstCube4()
   cube4 = 0
   
 EndIf
 
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-LiftMaxNoTimeout()
-rotateToBlackRight(@turningSpeed, "on", "off", "off")
-lineFollower2(16, @cruisingSpeed, "on", "off", "off")
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-robotSpin(89, "right", @turningSpeed, "on")
-moveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
-LiftPutCubeOnBoat()
-ClawHugMode()
-
-' MOVING BIG BOAT TO 1st CROSS
-reverseMoveSyncEncoder(6, @precisionSpeed, "on", "on", "on")
-ClawOpenMaxNoTimeout()
-LiftGrabBoatBack()
-moveSyncEncoder(2, @precisionSpeed, "on", "on", "on")
-ClawAirtight()
-wait(0.2)
-reverseMoveSyncEncoder(12, @cruisingSpeed, "on", "on", "on")
-robotArc(92, "right", "off", @cruisingSpeed, "off", "off", "on")
-lineFollower2(50, @cruisingSpeed, "on", "on", "on")
-
-' DELIVERING SECOND CUSTOM CUBE FOR BIG BOAT
-ClawOpenMax()
-LiftMax()
-reverseMoveSyncEncoder(5, @precisionSpeed, "on", "on", "on")
-robotSpin(90, "left", @turningSpeed, "on")
-
 If color2 = cube1 then
   
-  cube1pickup()
+  secondCube1()
   cube1 = 0
   
 ElseIf color2 = cube2 then
   
-  cube2pickup()
+  secondCube2()
   cube2 = 0
   
 ElseIf color2 = cube3 then
   
-  cube3pickup()
+  secondCube3()
   cube3 = 0
   
 Else
   
-  cube4pickup()
+  secondCube4()
   cube4 = 0
   
 EndIf
 
+lineFollower2(7, 60, "on", "off", "off")
+lineFollower2Intersection(60, "off", "off", "off")
 LiftMaxNoTimeout()
-lineFollower2Intersection(@precisionSpeed, "off", "on", "on")
-rotateToBlackLeft(@turningSpeed, "on", "off", "off")
-lineFollower2(6, @precisionSpeed, "on", "on", "on")
+lineFollower2(14, 50, "off", "on", "on")
 LiftPutCubeOnBoat()
+wait(0.2)
 ClawHugMode()
-reverseMoveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
-ClawOpenMaxNoTimeout()
+reverseMoveSyncEncoder(6, 50, "on", "on", "on")
 LiftMin()
-moveSyncEncoder(4, @precisionSpeed, "on", "on", "on")
-ClawAirtight()
+ClawCloseMax()
+LiftMax()
+lineFollower2(7, 50, "on", "on", "on")
+LiftOverFlag()
+wait(0.2)
+ClawHugMode()
 
 ' FINISHING CHALLENGE
-lineFollower2(85, @cruisingSpeed, "on", "on", "on")
-ClawOpenMax()
-robotArc(65, "left", "off", @cruisingSpeed, "off", "off", "off")
-moveSyncEncoder(17, @cruisingSpeed, "on", "on", "on")
+
+LiftMaxNoTimeout()
+lineFollower2(70, @cruisingSpeed, "on", "off", "off")
+arcMove2(55, 65, "left", 85, "off", "on", "on")
 
 ' ---------
 '   TIMER
 ' ---------
 
-LCD.Write(10, 10, Time.Get2() / 1000)
+LCD.Write(50, 50, Time.Get2() / 1000)
 
 Speaker.Tone(100, 2000, 200)
 Program.Delay(400)
