@@ -474,8 +474,10 @@ rotateToBlackLeft(@turningSpeed, "on", "on")
 ' MOVING BIG BOAT TO THE FURTHEST BUOY
 
 LiftGrabBoatBack()
-lineFollower2(120, @cruisingSpeed, "on", "on", "off")
+ClawCloseMaxNoTimeout()
+lineFollower2(124, @cruisingSpeed, "on", "on", "off")
 lineFollower2Intersection(30, "off", "on", "on")
+ClawOpenMax()
 robotSpin(93, "right", 50, "on", "on", "on")
 LiftMin()
 moveSyncEncoderTimeout(2, 40, 0.5, "on", "on", "on")
