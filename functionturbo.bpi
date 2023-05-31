@@ -1149,7 +1149,7 @@ Function rotateToBlackRight(in number Vmax, in string endBrake, in string accele
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
-    wait(0.2)
+    wait(0.1)
   EndIf
   
 EndFunction
@@ -1247,7 +1247,7 @@ Function rotateToBlackLeft(in number Vmax, in string endBrake, in string acceler
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
-    wait(0.2)
+    wait(0.1)
   EndIf
   
 EndFunction

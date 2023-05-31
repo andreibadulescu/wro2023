@@ -134,6 +134,11 @@
 @kpLiftLower = 0.8
 @kdLift = 1
 
+' pentru precizie ridicata la lift
+'@kpLiftRaise = 5
+'@kpLiftLower = 0.8
+'@kdLift = 2
+
 '********************************* Variabile folosite pentru culori ********************************
 
 ' RGB max values
