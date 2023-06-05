@@ -150,35 +150,29 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
   
   Motor.ResetCount(@stopString)
   
-  If @debug = "on" Then
+  'If @debug = "on" Then
     LCD.Clear()
-  EndIf
+  'EndIf
   
   errorOld = 0
   exitCondition = 1
   cmToDeg(encoderCM, encoder)
   
   While exitCondition = 1
-    leftEncoder = Motor.GetCount(@leftMotor)
-    rightEncoder = Motor.GetCount(@rightMotor)
+    leftEncoder = Math.Abs(Motor.GetCount(@leftMotor))
+    rightEncoder = Math.Abs(Motor.GetCount(@rightMotor))
     currentEncoder = (Math.Abs(leftEncoder) + Math.Abs(rightEncoder)) / 2
     
-    If @debug = "on" Then
+    'If @debug = "on" Then
       LCD.Write(10, 10, leftEncoder)
       LCD.Write(50, 10, rightEncoder)
       LCD.Write(100, 10, currentEncoder)
       LCD.Update()
-    EndIf
-    
-    If Vmax < 0 Then
-      sens = -1
-    Else
-      sens = 1
-    EndIf
+    'EndIf
     
     If acceleration = "on" Then
-      V = (currentEncoder / @acceleratedEncoder) * (Vmax - @V0 * sens) + @V0 * sens
-      V = Math.Abs(V) * sens
+      V = (currentEncoder / @acceleratedEncoder) * (Vmax - @V0) + @V0
+      V = Math.Abs(V)
       
       If Math.Abs(V) > Math.Abs(Vmax) Then
         V = Vmax
@@ -190,23 +184,17 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
     
     If deceleration = "on" Then
       If encoder - currentEncoder < @deceleratedEncoder Then
-        V = ((encoder - currentEncoder) / @deceleratedEncoder) * (Vmax - @V0 * sens) + @V0 * sens
-        V = Math.Abs(V) * sens
+        V = ((encoder - currentEncoder) / @deceleratedEncoder) * (Vmax - @V0) + @V0
+        V = Math.Abs(V)
         
-        If Math.Abs(V) < Math.Abs(@V0 * sens) Then
-          V = @V0 * sens
+        If Math.Abs(V) < Math.Abs(@V0) Then
+          V = @V0
         EndIf
       EndIf
     EndIf
     
-    If @debug = "on" Then
-      LCD.Write(10, 30, @V0 * sens)
-      LCD.Write(50, 30, V)
-      LCD.Update()
-    EndIf
-    
     If @motorType = "large" Then
-      error =  rightEncoder - leftEncoder
+      error =  leftEncoder - rightEncoder
       P = @kpMotor * error
       D = @kdMotor * (error - errorOld)
       motorLeft =  V + (P + D)
@@ -217,19 +205,11 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
       
       errorOld = error
     Else
-      error = leftEncoder + rightEncoder
+      error = rightEncoder - leftEncoder
       P = @kpMotor * error
       D = @kdMotor * (error - errorOld)
       motorLeft = (V + (P + D))
       motorRight = V - (P + D)
-      
-      If (sens = 1 And motorLeft < 0) Or (sens = -1 And motorLeft > 0) Then
-        motorLeft = motorLeft * (-1)
-      EndIf
-      
-      If (sens = 1 And motorRight < 0) Or (sens = -1 And motorRight > 0) Then
-        motorRight = motorRight * (-1)
-      EndIf
       
       Motor.StartPower(@leftMotor, -motorLeft)
       Motor.StartPower(@rightMotor, motorRight)
@@ -300,8 +280,8 @@ Function reverseMoveSyncEncoder (in number encoderCM, in number Vmax, in string 
     EndIf
     
     error = s2 - s1
-    P = @kpMotor * error
-    D = @kdMotor * (error - oldError)
+    P = @kpReverse * error
+    D = @kdReverse * (error - oldError)
     leftMotor = (V + (P + D))
     rightMotor = -1 * (V - (P + D))
     oldError = error

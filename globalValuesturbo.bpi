@@ -56,7 +56,7 @@
 @lfSensor = 1
 
 ' black - valoarea culorii negre de pe plansa
-@black = 20
+@black = 15
 
 ' white - valoarea culorii albe de pe plansa
 @white = 80
@@ -69,10 +69,10 @@
 @blackBLF = 115
 
 ' V0 - viteza de start a oricarui algoritm de line follower / move sync; minim 10, dar poate fi mai mare
-@V0 = 30
+@V0 = 25
 
 ' Vmax - viteza la care trebuie sa ajunga maxim algoritmul de line follower / move sync; maxim 90
-@Vmax = 90
+@Vmax = 100
 
 ' kp_lf - valoarea optima de kp pentru algoritmul de line follower
 @kpSensor = 0.6
@@ -94,10 +94,12 @@
 @kdLFReadSensor = 2
 
 ' kp_move_sync - valoarea optima de kp pentru algoritmul de move_sync
-@kpMotor = 1
+@kpMotor = 5.75
+@kpReverse = 2
 
 ' kd_move_sync - valoarea optima de kd pentru algoritmul de move_sync
-@kdMotor = 2
+@kdMotor = 1
+@kdReverse = 1
 
 @kpSpin = 3
 @kdSpin = 0
@@ -117,22 +119,22 @@
 
 ' AcceleratedEncoder - distanta (exprimate in grade de motor) pentru a accelera de la V0 la Vmax
 '                      valori uzuale : intre 50 si 150
-@acceleratedEncoder = 200
+@acceleratedEncoder = 120
 
 ' DeceleratedEncoder - distanta (exprimate in grade de motor) pentru a deccelera de la Vmax la V0
 '                      valori uzuale : intre 50 si 150
-@deceleratedEncoder = 200
+@deceleratedEncoder = 120
 
 '******************** Variabile folosite pentru brate, executie in thread paralel ******************
 
 ' coeficienti gheara
-@kpClaw = 0.8
-@kdClaw = 0.4
+@kpClaw = 0.9
+@kdClaw = 0.6
 
 ' coeficienti lift
-@kpLiftRaise = 1
-@kpLiftLower = 0.8
-@kdLift = 1
+@kpLiftRaise = 2
+@kpLiftLower = 0.6
+@kdLift = 0.9
 
 ' pentru precizie ridicata la lift
 '@kpLiftRaise = 5
@@ -163,7 +165,7 @@
 @timeToRead = 0.3
 
 ' General turning speed
-@turningSpeed = 60
+@turningSpeed = 70
 
 ' General precision speed
 @precisionSpeed = 30
