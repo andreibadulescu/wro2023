@@ -94,11 +94,13 @@
 @kdLFReadSensor = 2
 
 ' kp_move_sync - valoarea optima de kp pentru algoritmul de move_sync
-@kpMotor = 5.75
+@kpMotorSlow = 5
+@kpMotorFast = 7
 @kpReverse = 2
 
 ' kd_move_sync - valoarea optima de kd pentru algoritmul de move_sync
-@kdMotor = 1
+@kdMotorSlow = 1
+@kdMotorFast = 15
 @kdReverse = 1
 
 @kpSpin = 3

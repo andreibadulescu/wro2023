@@ -48,6 +48,14 @@ Function moveSyncEncoderTimeout(in number encoderCM, in number Vmax, in number s
   exitCondition = 1
   cmToDeg(encoderCM, encoder)
   
+  If Vmax <= 60 then
+    localKP = @kpMotorSlow
+    localKD = @kdMotorSlow
+  Else
+    localKP = @kpMotorFast
+    localKD = @kdMotorFast
+  EndIf
+  
   Time.Reset5()
   
   While exitCondition = 1
@@ -101,8 +109,8 @@ Function moveSyncEncoderTimeout(in number encoderCM, in number Vmax, in number s
     
     If @motorType = "large" Then
       error =  rightEncoder - leftEncoder
-      P = @kpMotor * error
-      D = @kdMotor * (error - errorOld)
+      P = localKP * error
+      D = localKD * (error - errorOld)
       motorLeft =  V + (P + D)
       MotorRight = V - (P + D)
       
@@ -112,8 +120,8 @@ Function moveSyncEncoderTimeout(in number encoderCM, in number Vmax, in number s
       errorOld = error
     Else
       error = leftEncoder + rightEncoder
-      P = @kpMotor * error
-      D = @kdMotor * (error - errorOld)
+      P = localKP * error
+      D = localKD * (error - errorOld)
       motorLeft = (V + (P + D))
       motorRight = V - (P + D)
       
@@ -150,9 +158,17 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
   
   Motor.ResetCount(@stopString)
   
-  'If @debug = "on" Then
+  If @debug = "on" Then
     LCD.Clear()
-  'EndIf
+  EndIf
+  
+  If Vmax <= 60 then
+    localKP = @kpMotorSlow
+    localKD = @kdMotorSlow
+  Else
+    localKP = @kpMotorFast
+    localKD = @kdMotorFast
+  EndIf
   
   errorOld = 0
   exitCondition = 1
@@ -163,12 +179,12 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
     rightEncoder = Math.Abs(Motor.GetCount(@rightMotor))
     currentEncoder = (Math.Abs(leftEncoder) + Math.Abs(rightEncoder)) / 2
     
-    'If @debug = "on" Then
+    If @debug = "on" Then
       LCD.Write(10, 10, leftEncoder)
       LCD.Write(50, 10, rightEncoder)
       LCD.Write(100, 10, currentEncoder)
       LCD.Update()
-    'EndIf
+    EndIf
     
     If acceleration = "on" Then
       V = (currentEncoder / @acceleratedEncoder) * (Vmax - @V0) + @V0
@@ -195,8 +211,8 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
     
     If @motorType = "large" Then
       error =  leftEncoder - rightEncoder
-      P = @kpMotor * error
-      D = @kdMotor * (error - errorOld)
+      P = localKP * error
+      D = localKD * (error - errorOld)
       motorLeft =  V + (P + D)
       MotorRight = V - (P + D)
       
@@ -206,8 +222,8 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
       errorOld = error
     Else
       error = rightEncoder - leftEncoder
-      P = @kpMotor * error
-      D = @kdMotor * (error - errorOld)
+      P = localKP * error
+      D = localKD * (error - errorOld)
       motorLeft = (V + (P + D))
       motorRight = V - (P + D)
       
@@ -790,14 +806,14 @@ Function arcMove2(in number radius, in number alfa, in string direction, in numb
     EndIf
     
     If @debug = "on" then
-    LCD.Clear()
-    LCD.Write(10, 10, expectedEncoderFar)
-    LCD.Write(10, 20, currentEncoderFar)
-    LCD.Write(10, 30, expectedEncoderClose)
-    LCD.Write(10, 40, currentEncoderClose)
-    LCD.Write(10, 50, farSpeed)
-    LCD.Write(10, 60, closeSpeed)
-    LCD.Write(10, 60, currentAlfa)
+      LCD.Clear()
+      LCD.Write(10, 10, expectedEncoderFar)
+      LCD.Write(10, 20, currentEncoderFar)
+      LCD.Write(10, 30, expectedEncoderClose)
+      LCD.Write(10, 40, currentEncoderClose)
+      LCD.Write(10, 50, farSpeed)
+      LCD.Write(10, 60, closeSpeed)
+      LCD.Write(10, 60, currentAlfa)
     EndIf
    
   EndWhile
@@ -1075,8 +1091,8 @@ Function rotateToBlackRight(in number Vmax, in string endBrake, in string accele
       V = Vmax
     EndIf
     error =  leftEncoder - rightEncoder
-    P = @kpMotor * error
-    D = @kdMotor * (error - oldError)
+    P = @kpSpin * error
+    D = @kdSpin * (error - oldError)
     leftMotor = sens * (V - (P + D))
     rightMotor = sens * (V + (P + D))
     oldError = error
@@ -1173,8 +1189,8 @@ Function rotateToBlackLeft(in number Vmax, in string endBrake, in string acceler
     EndIf
     
     error =  leftEncoder - rightEncoder
-    P = @kpMotor * error
-    D = @kdMotor * (error - oldError)
+    P = @kpSpin * error
+    D = @kdSpin * (error - oldError)
     leftMotor = sens * (V - (P + D))
     rightMotor = sens * (V + (P + D))
     oldError = error
@@ -1456,8 +1472,8 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
     
     If @motorType = "large" Then
       error =  rightEncoder - leftEncoder
-      P = @kpMotor * error
-      D = @kdMotor * (error - errorOld)
+      P = @kpMotorSlow * error
+      D = @kdMotorSlow * (error - errorOld)
       motorLeft =  V + (P + D)
       MotorRight = V - (P + D)
       
@@ -1467,8 +1483,8 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
       errorOld = error
     Else
       error = leftEncoder + rightEncoder
-      P = @kpMotor * error
-      D = @kdMotor * (error - errorOld)
+      P = @kpMotorSlow * error
+      D = @kdMotorSlow * (error - errorOld)
       motorLeft = (V + (P + D))
       motorRight = V - (P + D)
       
