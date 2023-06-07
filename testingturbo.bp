@@ -108,7 +108,7 @@ sub ClawDropCube
 EndSub
 
 sub ClawCustomCubeIn
-  deltaD = 123
+  deltaD = 124
 EndSub
 
 sub ClawCustomCubeOut
@@ -148,10 +148,10 @@ EndSub
 
 sub firstCube2
   LiftMin()
-  lineFollower2(22, @cruisingSpeed, "on", "on", "on")
   ClawCustomCubeIn()
+  lineFollower2(16, @cruisingSpeed, "on", "on", "on")
   arcMove2(14, 12, "left", 75, "on", "on", "on")
-  moveSyncEncoder(6, 50, "on", "on", "on")
+  moveSyncEncoder(10, 50, "on", "on", "on")
   ClawCloseMax()
   wait(0.1)
   reverseMoveSyncEncoder(6, 50, "on", "on", "on")
@@ -161,10 +161,10 @@ EndSub
 
 sub firstCube3
   LiftMin()
-  lineFollower2(22, @cruisingSpeed, "on", "on", "on")
   ClawCustomCubeIn()
+  lineFollower2(16, @cruisingSpeed, "on", "on", "on")
   arcMove2(14, 12, "right", 75, "on", "on", "on")
-  moveSyncEncoder(6, 50, "on", "on", "on")
+  moveSyncEncoder(10, 50, "on", "on", "on")
   ClawCloseMax()
   wait(0.1)
   reverseMoveSyncEncoder(6, 50, "on", "on", "on")
@@ -191,12 +191,12 @@ sub secondCube1
   lineFollower2(2, 30, "off", "off", "on")
   arcMove2(12, 40, "left", 75, "on", "on", "on")
   ClawCustomCubeOut()
-  arcMove2(12, 29, "right", 75, "on", "on", "on")
-  moveSyncEncoder(10, 50, "on", "on", "on")
+  arcMove2(12, 27, "right", 75, "on", "on", "on")
+  moveSyncEncoder(8, 50, "on", "on", "on")
   ClawCloseMax()
   wait(0.1)
-  reverseMoveSyncEncoder(10, 50, "on", "on", "on")
-  arcMove2(12, 29, "right", -75, "on", "on", "on")
+  reverseMoveSyncEncoder(8, 50, "on", "on", "on")
+  arcMove2(12, 27, "right", -75, "on", "on", "on")
   arcMove2(12, 40, "left", -75, "on", "on", "on")
 EndSub
 
@@ -235,19 +235,53 @@ sub secondCube4
   arcMove2(12, 40, "right", -75, "on", "on", "on")
 EndSub
 
-ClawAirtight()
-classicKpArcMove = @kpArcMove
-classicKdArcMove = @kdArcMove
-@kpArcMove = 17
-@kdArcMove = 20
-wait(0.5)
-reverseMoveSyncEncoder(21, 80, "on", "on", "on")
-wait(0.2)
-arcMove2(15, 105, "right", 90, "off", "off", "on")
-@kpArcMove = classicKpArcMove
-@kdArcMove = classicKdArcMove
-lineFollower2(20, @cruisingSpeed, "off", "off", "off")
-lineFollower2Intersection(@cruisingSpeed, "off", "off", "off")
-Speaker.Tone(100, 2000, 200)
-lineFollower2(33, @cruisingSpeed, "off", "on", "on")
-wait(30)
+cube1 = 2
+cube2 = 0
+cube3 = 2
+cube4 = 0
+
+lineFollower2Intersection(50, "on", "on", "off")
+
+If cube4 <> 0 then
+  
+  firstCube4()
+  cube4 = 0
+  
+ElseIf cube2 <> 0 then
+  
+  firstCube2()
+  cube2 = 0
+  
+ElseIf cube3 <> 0 then
+  
+  firstCube3()
+  cube3 = 0
+  
+Else
+  
+  firstCube1()
+  cube1 = 0
+  
+EndIf
+
+If cube4 <> 0 then
+  
+  secondCube4()
+  cube4 = 0
+  
+ElseIf cube2 <> 0 then
+  
+  secondCube2()
+  cube2 = 0
+  
+ElseIf cube3 <> 0 then
+  
+  secondCube3()
+  cube3 = 0
+  
+Else
+  
+  secondCube1()
+  cube1 = 0
+  
+EndIf

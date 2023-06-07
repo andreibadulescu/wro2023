@@ -59,7 +59,7 @@
 @black = 15
 
 ' white - valoarea culorii albe de pe plansa
-@white = 80
+@white = 74
 
 ' grey - valoarea intersectiei de culoare alb-negru. Folosit pentru a face line follower cu un singur senzor
 @grey = 17
@@ -75,20 +75,25 @@
 @Vmax = 100
 
 ' kp_lf - valoarea optima de kp pentru algoritmul de line follower
-@kpSensor = 0.6
+@kpSensorSlow = 0.7
+@kpSensorFast = 0.4
+@kpSensorMoor = 1.25
 
 ' kd_lf - valoarea optima de kd pentru algoritmul de line follower
-@kdSensor = 1.5
+@kdSensorSlow = 1
+@kdSensorFast = 3
+@kdSensorMoor = 1.6
 
 ' custom values for LFReading
 @kpReadSensor = 0.4
 @kdReadSensor = 1.6
+
 @greyRead = 28
 @kiReadSensor = 0.001
 
+' VALORI OPTIME DE KP, KD PENTRU ALGORITMUL DE arcMove2
 @kpArcMove = 5
 @kdArcMove = 1
-
 
 @kpLFReadSensor = 1
 @kdLFReadSensor = 2
@@ -138,11 +143,6 @@
 @kpLiftLower = 0.6
 @kdLift = 0.9
 
-' pentru precizie ridicata la lift
-'@kpLiftRaise = 5
-'@kpLiftLower = 0.8
-'@kdLift = 2
-
 '********************************* Variabile folosite pentru culori ********************************
 
 ' RGB max values
@@ -164,7 +164,7 @@
 @tutzanAMG = "on"
 
 ' Required seconds to read properly an object
-@timeToRead = 0.3
+@timeToRead = 0.2
 
 ' General turning speed
 @turningSpeed = 70
@@ -177,3 +177,6 @@
 
 ' Precision turning speed
 @precisionTurningSpeed = 30
+
+' Errcheck mode
+@modeHandler = "normal"

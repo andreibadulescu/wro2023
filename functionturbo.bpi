@@ -162,7 +162,7 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
     LCD.Clear()
   EndIf
   
-  If Vmax <= 60 then
+  If Vmax <= 70 then
     localKP = @kpMotorSlow
     localKD = @kdMotorSlow
   Else
@@ -407,6 +407,19 @@ Function lineFollower2 (in number encoderCM, in number Vmax, in string accelerat
   
   cmToDeg(encoderCM, encoder)
   
+  If @modeHandler <> "moor" then
+    If Vmax <= 75 then
+      localKP = @kpSensorSlow
+      localKD = @kdSensorSlow
+    Else
+      localKP = @kpSensorFast
+      localKD = @kdSensorFast
+    EndIf
+  Else
+    localKP = @kpSensorMoor
+    localKD = @kdSensorMoor
+  EndIf
+  
   While exitCondition = 1
     s1 = Sensor.ReadPercent(@leftSensor)
     s2 = Sensor.ReadPercent(@rightSensor)
@@ -437,8 +450,8 @@ Function lineFollower2 (in number encoderCM, in number Vmax, in string accelerat
     EndIf
     
     error = s1 - s2
-    P = @kpSensor * error
-    D = @kdSensor * (error - errorOld)
+    P = localKP * error
+    D = localKD * (error - errorOld)
     
     If @debug = "on" Then
       LCD.Write(10, 50, V)
@@ -486,6 +499,19 @@ Function lineFollower2Intersection (in number Vmax, in string acceleration, in s
   oldError = 0
   exitCondition = 1
   
+  If @modeHandler <> "moor" then
+    If Vmax <= 75 then
+      localKP = @kpSensorSlow
+      localKD = @kdSensorSlow
+    Else
+      localKP = @kpSensorFast
+      localKD = @kdSensorFast
+    EndIf
+  Else
+    localKP = @kpSensorMoor
+    localKD = @kdSensorMoor
+  EndIf
+  
   While exitCondition = 1
     s1 = Sensor.ReadPercent(@leftSensor)
     s2 = Sensor.ReadPercent(@rightSensor)
@@ -503,8 +529,8 @@ Function lineFollower2Intersection (in number Vmax, in string acceleration, in s
     EndIf
     
     error = s1 - s2
-    P = @kpSensor * error
-    D = @kdSensor * (error - oldError)
+    P = localKP * error
+    D = localKD * (error - oldError)
     
     If @motorType = "medium" Then
       motorLeft = -1 * (V + (P + D))
@@ -729,7 +755,14 @@ Function arcMove2(in number radius, in number alfa, in string direction, in numb
     farSpeed = farSpeed * -1
     closeSpeed = closeSpeed * -1
   EndIf
-    
+  
+  If @modeHandler <> "moor" then
+    localKP = @kpArcMove
+    localKD = @kdArcMove
+  Else
+    localKP = 17
+    localKD = 20
+  EndIf
   
   While exitCondition = 1
     
@@ -787,14 +820,14 @@ Function arcMove2(in number radius, in number alfa, in string direction, in numb
     EndIf
     
     errorClose = expectedEncoderClose - currentEncoderClose
-    PClose = @kpArcMove * errorClose
-    DClose = @kdArcMove * (errorClose - oldErrorClose)
+    PClose = localKP * errorClose
+    DClose = localKD * (errorClose - oldErrorClose)
     speedCloseMotor = speedC + (PClose + DClose)
     oldErrorClose = errorClose
     
     errorFar = expectedEncoderFar - currentEncoderFar
-    PFar = @kpArcMove * errorFar
-    DFar = @kdArcMove * (errorFar - oldErrorFar)
+    PFar = localKP * errorFar
+    DFar = localKD * (errorFar - oldErrorFar)
     speedFarMotor = speedF + (PFar + DFar)
     oldErrorFar = errorFar
     
@@ -1831,4 +1864,16 @@ Function readRGB(in string side)
     
     Program.Delay(150)
   EndWhile
+EndFunction
+
+Function describeDigit(in number digit, out string description)
+  
+  If digit = 2 then
+    description = "Two"
+  ElseIf digit = 3 then
+    description = "Three"
+  Else
+    description = "Ten"
+  EndIf
+  
 EndFunction

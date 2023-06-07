@@ -262,8 +262,12 @@ EndIf
 LCD.Clear() ' 2 - blue, 3 - green
 LCD.Write(10, 10, color1)
 LCD.Write(10, 20, color2)
+'describeDigit(color1, requirement1)
+'describeDigit(color2, requirement2)
 
+'Speaker.Play(75, requirement1)
 reverseMoveSyncEncoder(7.5, @cruisingSpeed, "on", "on", "on")
+'Speaker.Play(75, requirement2)
 rotateToBlackRight(@turningSpeed, "on", "on")
 LiftMin()
 ClawHugMode()
@@ -277,24 +281,34 @@ ClawCloseMax()
 wait(0.1)
 moveSyncEncoder(3, 40, "on", "on", "on")
 wait(0.15)
-robotSpin(91, "left", 50, "on", "on", "on")
+robotSpin(91.5, "left", 50, "on", "on", "on")
 LiftPutCubeOnBoat()
+wait(0.1)
 
 ' READING COLOR CONTAINERS
 moveSyncEncoder(34, 60, "on", "off", "off")
 readRGBWhileMoving("right", 6, 40, "off", cube4)
+'describeDigit(cube4, sound4)
+'Speaker.Play(75, sound4)
 readRGBWhileMoving("right", 6, 40, "off", cube3)
+'describeDigit(cube3, sound3)
+'Speaker.Play(75, sound3)
 readRGBWhileMoving("right", 6, 40, "off", cube2)
+'describeDigit(cube2, sound2)
+'Speaker.Play(75, sound2)
 moveSyncEncoder(24, 60, "off", "on", "on")
 ClawDropCube()
 wait(0.1)
 
 cube1 = 10 - cube2 - cube3 - cube4
+'describeDigit(cube1, sound1)
+'Speaker.Play(75, sound1)
 
 LCD.Write(20, 10, cube1)
 LCD.Write(20, 20, cube2)
 LCD.Write(20, 30, cube3)
 LCD.Write(20, 40, cube4)
+
 
 reverseMoveSyncEncoder(29, @cruisingSpeed, "on", "on", "on")
 rotateToBlackLeft(@turningSpeed, "on", "on")
@@ -349,16 +363,17 @@ Else
   
 EndIf
 
-arcMove2(37, 121, "left", -75, "on", "on", "on")
+arcMove2(37, 120, "left", -75, "on", "on", "on")
 rotateToBlackLeft(@precisionturningSpeed, "on", "on")
 liftPutCubeOnBoat()
-reverseMoveSyncEncoder(10, 70, "on", "on", "on")
-lineFollower2(18, 70, "on", "off", "off")
-moveSyncEncoder(7, 40, "off", "on", "on")
+reverseMoveSyncEncoder(8, 60, "on", "on", "on")
+lineFollower2(16, 60, "on", "off", "off")
+Speaker.Tone(100, 2000, 200)
+moveSyncEncoder(8, 40, "off", "on", "on")
 LiftPlaceCubeOnBoat()
 wait(0.1)
 ClawDropCube()
-wait(0.1)
+wait(0.2)
 reverseMoveSyncEncoder(8, 50, "on", "on", "on")
 ClawOpenMax()
 LiftMin()
@@ -380,26 +395,22 @@ moveSyncEncoderTimeout(11, 50, 0.7, "on", "on", "on")
 
 ' MOVING BIG BOAT TO 1st CROSS
 ClawAirtight()
-classicKpArcMove = @kpArcMove
-classicKdArcMove = @kdArcMove
-@kpArcMove = 17
-@kdArcMove = 20
-wait(0.5)
-reverseMoveSyncEncoder(21, 80, "on", "on", "on")
+@modeHandler = "moor"
 wait(0.2)
-arcMove2(15, 105, "right", 90, "off", "off", "on")
-@kpArcMove = classicKpArcMove
-@kdArcMove = classicKdArcMove
+reverseMoveSyncEncoder(21, 80, "on", "on", "on")
+wait(0.3)
+arcMove2(14, 105, "right", 100, "off", "off", "on")
 lineFollower2(20, @cruisingSpeed, "off", "off", "off")
 lineFollower2Intersection(@cruisingSpeed, "off", "off", "off")
-Speaker.Tone(100, 2000, 200)
-lineFollower2(33, @cruisingSpeed, "off", "on", "on")
+lineFollower2(30, @cruisingSpeed, "off", "on", "on")
 ClawOpenMax()
+@modeHandler = "normal"
+wait(0.1)
 
 ' PICKING UP CONTAINERS FOR SMALL BOAT
-arcMove2(15, 90, "right", -75, "on", "on", "on")
-lineFollower2(10, 60, "on", "off", "off")
-lineFollower2Intersection(50, "off", "on", "on")
+arcMove2(20, 90, "right", -75, "on", "on", "on")
+lineFollower2(8, 40, "on", "off", "off")
+lineFollower2Intersection(40, "off", "on", "off")
 
 If cube4 <> 0 then
   
@@ -470,13 +481,16 @@ ClawOpenMax()
 
 ' MOVING SMALL BOAT TO 1st CROSS
 
+robotSpin(3, "left", @precisionTurningSpeed, "off", "off", "on")
 LiftGrabBoatSide()
 moveSyncEncoder(8, 50, "on", "on", "on")
 ClawAirtightSmallBoat()
+wait(0.2)
 arcMove2(12, 93, "right", -60, "on", "on", "on")
 
 ' MOVE BOATS AND FINISH RUN
 
+@modeHandler = "moor"
 lineFollower2(25, @cruisingSpeed, "off", "off", "off")
 lineFollower2Intersection(@cruisingSpeed, "off", "off", "off")
 lineFollower2(38, @cruisingSpeed, "off", "on", "on")
@@ -484,6 +498,7 @@ reverseMoveSyncEncoder(4.5, 50, "on", "on", "on")
 arcMove2(20, 46, "left", 75, "on", "on", "on")
 moveSyncEncoder(43, @cruisingSpeed, "on", "on", "on")
 ClawOpenMax()
+@modeHandler = "normal"
 wait(0.1)
 robotSpin(110, "right", @turningSpeed, "on", "on", "on")
 LiftMax()
