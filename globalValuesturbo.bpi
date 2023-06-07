@@ -126,11 +126,11 @@
 
 ' AcceleratedEncoder - distanta (exprimate in grade de motor) pentru a accelera de la V0 la Vmax
 '                      valori uzuale : intre 50 si 150
-@acceleratedEncoder = 120
+@acceleratedEncoder = 180
 
 ' DeceleratedEncoder - distanta (exprimate in grade de motor) pentru a deccelera de la Vmax la V0
 '                      valori uzuale : intre 50 si 150
-@deceleratedEncoder = 120
+@deceleratedEncoder = 180
 
 '******************** Variabile folosite pentru brate, executie in thread paralel ******************
 
@@ -178,5 +178,6 @@
 ' Precision turning speed
 @precisionTurningSpeed = 30
 
-' Errcheck mode
+' kpError handler
 @modeHandler = "normal"
+@craneMode = "normal"

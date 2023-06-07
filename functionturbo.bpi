@@ -1463,7 +1463,7 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
         EndIf
       EndIf
     Else
-      If blue >= 10 Then
+      If blue >= 21 Then
         blueRead++
       EndIf
     EndIf
@@ -1875,5 +1875,15 @@ Function describeDigit(in number digit, out string description)
   Else
     description = "Ten"
   EndIf
+  
+EndFunction
+
+Function discharge(in number time)
+  
+  Time.Reset5()
+  
+  While Time.Get5() / 1000 < time
+    Motor.StartPower(@stopString, 100)
+  EndWhile
   
 EndFunction
