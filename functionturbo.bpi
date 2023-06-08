@@ -16,7 +16,7 @@ EndFunction
 
 Function wait (in number sec)
   Time.Reset5()
-  
+  Motor.Stop(@stopString, "True")
   While Time.Get5() < sec * 1000
   EndWhile
 EndFunction
@@ -48,12 +48,18 @@ Function moveSyncEncoderTimeout(in number encoderCM, in number Vmax, in number s
   exitCondition = 1
   cmToDeg(encoderCM, encoder)
   
-  If Vmax <= 60 then
+  If Vmax <= 70 then
     localKP = @kpMotorSlow
     localKD = @kdMotorSlow
+    localKE = 1
   Else
     localKP = @kpMotorFast
     localKD = @kdMotorFast
+    localKE = 1
+    
+    If Vmax > 90 then
+      localKE = @keMotor
+    EndIf
   EndIf
   
   Time.Reset5()
@@ -61,7 +67,7 @@ Function moveSyncEncoderTimeout(in number encoderCM, in number Vmax, in number s
   While exitCondition = 1
     currentTime = Time.Get5()
     
-    leftEncoder = Motor.GetCount(@leftMotor)
+    leftEncoder = Motor.GetCount(@leftMotor) * localKE
     rightEncoder = Motor.GetCount(@rightMotor)
     currentEncoder = (Math.Abs(leftEncoder) + Math.Abs(rightEncoder)) / 2
     
@@ -165,9 +171,15 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
   If Vmax <= 70 then
     localKP = @kpMotorSlow
     localKD = @kdMotorSlow
+    localKE = 1
   Else
     localKP = @kpMotorFast
     localKD = @kdMotorFast
+    localKE = 1
+    
+    If Vmax > 90 then
+      localKE = @keMotor
+    EndIf
   EndIf
   
   errorOld = 0
@@ -175,7 +187,7 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
   cmToDeg(encoderCM, encoder)
   
   While exitCondition = 1
-    leftEncoder = Math.Abs(Motor.GetCount(@leftMotor))
+    leftEncoder = Math.Abs(Motor.GetCount(@leftMotor)) * localKE
     rightEncoder = Math.Abs(Motor.GetCount(@rightMotor))
     currentEncoder = (Math.Abs(leftEncoder) + Math.Abs(rightEncoder)) / 2
     
@@ -214,7 +226,7 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
       P = localKP * error
       D = localKD * (error - errorOld)
       motorLeft =  V + (P + D)
-      MotorRight = V - (P + D)
+      motorRight = V - (P + D)
       
       Motor.StartPower(@leftMotor, motorLeft)
       Motor.StartPower(@rightMotor, motorRight)
@@ -853,6 +865,7 @@ Function arcMove2(in number radius, in number alfa, in string direction, in numb
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
+    wait(0.1)
   EndIf
   
 EndFunction
@@ -993,6 +1006,7 @@ Function arcMove2Timer(in number radius, in number alfa, in string direction, in
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
+    wait(0.1)
   EndIf
   
 EndFunction
@@ -1080,6 +1094,7 @@ Function robotSpin(in number degrees, in string direction, in number speed, in s
   
   If endBrake = "on" Then
     Motor.Stop(@stopString, "True")
+    wait(0.1)
   EndIf
   
 EndFunction
@@ -1457,13 +1472,11 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
     EndIf
     
     If side = "left" Then
-      If blue > 4 And green > 4 Then
-        If blue >= 8 Then
-          blueRead++
-        EndIf
+      If blue >= 5 And green > 2 Then
+        blueRead++
       EndIf
     Else
-      If blue >= 21 Then
+      If blue >= 16 Then
         blueRead++
       EndIf
     EndIf

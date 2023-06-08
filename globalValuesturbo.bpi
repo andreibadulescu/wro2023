@@ -100,13 +100,15 @@
 
 ' kp_move_sync - valoarea optima de kp pentru algoritmul de move_sync
 @kpMotorSlow = 5
-@kpMotorFast = 7
+@kpMotorFast = 6
 @kpReverse = 2
 
 ' kd_move_sync - valoarea optima de kd pentru algoritmul de move_sync
 @kdMotorSlow = 1
-@kdMotorFast = 15
+@kdMotorFast = 12
 @kdReverse = 1
+
+@keMotor = 1.0005
 
 @kpSpin = 3
 @kdSpin = 0
@@ -178,6 +180,6 @@
 ' Precision turning speed
 @precisionTurningSpeed = 30
 
-' kpError handler
+' Mode handlers
 @modeHandler = "normal"
 @craneMode = "normal"
