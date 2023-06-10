@@ -15,10 +15,8 @@ EndFunction
 ' ----------
 
 Function wait (in number sec)
-  Time.Reset5()
   Motor.Stop(@stopString, "True")
-  While Time.Get5() < sec * 1000
-  EndWhile
+  Program.Delay(sec * 1000)
 EndFunction
 
 ' ----------
@@ -48,19 +46,15 @@ Function moveSyncEncoderTimeout(in number encoderCM, in number Vmax, in number s
   exitCondition = 1
   cmToDeg(encoderCM, encoder)
   
-  If Vmax <= 70 then
+  If Vmax <= 65 then
     localKP = @kpMotorSlow
     localKD = @kdMotorSlow
-    localKE = 1
   Else
     localKP = @kpMotorFast
     localKD = @kdMotorFast
-    localKE = 1
-    
-    If Vmax > 90 then
-      localKE = @keMotor
-    EndIf
   EndIf
+  
+  localKE = @keMotor
   
   Time.Reset5()
   
@@ -168,20 +162,15 @@ Function moveSyncEncoder (in number encoderCM, in number Vmax, in string acceler
     LCD.Clear()
   EndIf
   
-  If Vmax <= 70 then
+  If Vmax <= 65 then
     localKP = @kpMotorSlow
     localKD = @kdMotorSlow
-    localKE = 1
   Else
     localKP = @kpMotorFast
     localKD = @kdMotorFast
-    localKE = 1
-    
-    If Vmax > 90 then
-      localKE = @keMotor
-    EndIf
   EndIf
   
+  localKE = @keMotor
   errorOld = 0
   exitCondition = 1
   cmToDeg(encoderCM, encoder)
@@ -267,13 +256,15 @@ Function reverseMoveSyncEncoder (in number encoderCM, in number Vmax, in string 
     LCD.Clear()
   EndIf
   
+  localKE = @keMotor
+  
   oldError = 0
   exitCondition = 1
   cmToDeg(encoderCM, encoder)
   
   While exitCondition = 1
     
-    s1 = Math.Abs(Motor.GetCount(@leftMotor))
+    s1 = Math.Abs(Motor.GetCount(@leftMotor)) * localKE
     s2 = Math.Abs(Motor.GetCount(@rightMotor))
     currentEncoder = (s1 + s2) / 2
     
@@ -420,7 +411,7 @@ Function lineFollower2 (in number encoderCM, in number Vmax, in string accelerat
   cmToDeg(encoderCM, encoder)
   
   If @modeHandler <> "moor" then
-    If Vmax <= 75 then
+    If Vmax <= 65 then
       localKP = @kpSensorSlow
       localKD = @kdSensorSlow
     Else
@@ -434,7 +425,7 @@ Function lineFollower2 (in number encoderCM, in number Vmax, in string accelerat
   
   While exitCondition = 1
     s1 = Sensor.ReadPercent(@leftSensor)
-    s2 = Sensor.ReadPercent(@rightSensor)
+    s2 = Sensor.ReadPercent(@rightSensor) * 1.25
     currentEncoder = (Math.Abs(Motor.GetCount(@leftMotor)) + Math.Abs(Motor.GetCount(@rightMotor))) / 2
     
     If acceleration = "on" Then
@@ -557,11 +548,12 @@ Function lineFollower2Intersection (in number Vmax, in string acceleration, in s
     
     If s1 < @black Or s2 < @black Then
       exitCondition = 0
+      Speaker.Tone(100, 5000, 200)
     EndIf
   EndWhile
   
   If alignToCross = "on" Then
-    moveSyncEncoder(@wheelAxSensorAxDistance - 2, Vmax, "off", "on", endBrake)
+    moveSyncEncoder(@wheelAxSensorAxDistance - 2.5, 50, "off", "on", endBrake)
   Else
     If endBrake = "on" Then
       Motor.Stop(@stopString, "True")
@@ -734,11 +726,13 @@ Function arcMove2(in number radius, in number alfa, in string direction, in numb
     farMotor = @rightMotor
     closeSignMediumMotor = -1
     farSignMediumMotor = 1
+    radius = radius * 1.095
   Else
     closeMotor = @rightMotor
     farMotor = @leftMotor
     closeSignMediumMotor = 1
     farSignMediumMotor = -1
+    radius = radius * 1.115
   EndIf
   
   cmCerc = (2 * radius * Math.Pi)
@@ -780,6 +774,12 @@ Function arcMove2(in number radius, in number alfa, in string direction, in numb
     
     currentEncoderClose = Math.Abs(Motor.GetCount(closeMotor))
     currentEncoderFar = Math.Abs(Motor.GetCount(farMotor))
+    
+    If direction = "right" Then
+      currentEncoderClose = currentEncoderClose * @keArcMoveRight
+    Else
+      currentEncoderFar = currentEncoderFar * @keArcMoveLeft
+    EndIf
     
     currentEncoder = (currentEncoderClose + currentEncoderFar) / 2
     currentAlfa = (currentEncoder / encoderCerc) * 360
@@ -1025,14 +1025,18 @@ Function robotSpin(in number degrees, in string direction, in number speed, in s
   
   If direction = "left" Then
     sign = 1
+    localKP = @kpSpinLeft
+    localKD = @kdSpinLeft
   Else
     sign = -1
+    localKP = @kpSpinRight
+    localKD = @kdSpinRight
   EndIf
   
   While exitCondition = 1
     
-    leftEncoder = Math.Abs(Motor.GetCount(@leftMotor))
-    rightEncoder = Math.Abs(Motor.GetCount(@rightMotor))
+    leftEncoder = Math.Abs(Motor.GetCount(@leftMotor)) 
+    rightEncoder = Math.Abs(Motor.GetCount(@rightMotor)) * @keSpin
     currentEncoder = (leftEncoder + rightEncoder) / 2
     
     If @debug = "on" Then
@@ -1065,8 +1069,8 @@ Function robotSpin(in number degrees, in string direction, in number speed, in s
     EndIf
     
     error =  leftEncoder - rightEncoder
-    P = @kpSpin * error
-    D = @kdSpin * (error - oldError)
+    P = localKP * error
+    D = localKD * (error - oldError)
     leftMotor = V - (P + D)
     rightMotor = V + (P + D)
     oldError = error
@@ -1139,8 +1143,8 @@ Function rotateToBlackRight(in number Vmax, in string endBrake, in string accele
       V = Vmax
     EndIf
     error =  leftEncoder - rightEncoder
-    P = @kpSpin * error
-    D = @kdSpin * (error - oldError)
+    P = @kpSpinRight * error
+    D = @kdSpinRight * (error - oldError)
     leftMotor = sens * (V - (P + D))
     rightMotor = sens * (V + (P + D))
     oldError = error
@@ -1162,7 +1166,7 @@ Function rotateToBlackRight(in number Vmax, in string endBrake, in string accele
   Time.Reset9()
   isum = 0
   
-  While Time.Get9() < 250
+  While Time.Get9() < 500
     s1 = Sensor.ReadPercent(1)
     s2 = Sensor.ReadPercent(2)
     
@@ -1237,8 +1241,8 @@ Function rotateToBlackLeft(in number Vmax, in string endBrake, in string acceler
     EndIf
     
     error =  leftEncoder - rightEncoder
-    P = @kpSpin * error
-    D = @kdSpin * (error - oldError)
+    P = @kpSpinLeft * error
+    D = @kdSpinLeft * (error - oldError)
     leftMotor = sens * (V - (P + D))
     rightMotor = sens * (V + (P + D))
     oldError = error
@@ -1260,7 +1264,7 @@ Function rotateToBlackLeft(in number Vmax, in string endBrake, in string acceler
   Time.Reset9()
   isum = 0
   
-  While Time.Get9() < 300
+  While Time.Get9() < 500
     s1 = Sensor.ReadPercent(1)
     s2 = Sensor.ReadPercent(2)
     
@@ -1434,6 +1438,16 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
     @debugReadIndex++
   EndIf
   
+  If Vmax <= 65 then
+    localKP = @kpMotorSlow
+    localKD = @kdMotorSlow
+  Else
+    localKP = @kpMotorFast
+    localKD = @kdMotorFast
+  EndIf
+  
+  localKE = @keMotor
+  
   blueRead = 0
   greenRead = 0
   index = 0
@@ -1445,7 +1459,7 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
   cmToDeg(encoderCM, encoder)
   
   While exitCondition = 1
-    leftEncoder = Motor.GetCount(@leftMotor)
+    leftEncoder = Motor.GetCount(@leftMotor) * localKE
     rightEncoder = Motor.GetCount(@rightMotor)
     currentEncoder = (Math.Abs(leftEncoder) + Math.Abs(rightEncoder)) / 2
     
@@ -1476,7 +1490,7 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
         blueRead++
       EndIf
     Else
-      If blue >= 16 Then
+      If blue >= 13 Then
         blueRead++
       EndIf
     EndIf
@@ -1570,6 +1584,180 @@ Function readRGBWhileMoving (in string side, in number encoderCM, in number Vmax
     Else
       color = 3
     EndIf
+  EndIf
+  
+  If @debug = "on" Then
+    For i = 0 To index
+      line = Text.Append(redValues[i], " ")
+      line = Text.Append(line, greenValues[i])
+      line = Text.Append(line, " ")
+      line = Text.Append(line, blueValues[i])
+      EV3File.WriteLine(debugFile, line)
+      EV3File.WriteLine(debugFile, line)
+    EndFor
+    
+    EV3File.WriteLine(debugFile, color)
+  EndIf
+  
+EndFunction
+
+Function readHSVWhileMoving (in number encoderCM, in number Vmax, in string endBrake, out number color)
+  
+  Motor.ResetCount(@stopString)
+  Sensor.SetMode(@rightReadSensor, 4)
+  
+  If @debug = "on" Then
+    debugFilename = Text.Append("debugFileRGBWhileMoving", @debugReadIndex)
+    debugFilename = Text.Append(debugFilename, ".txt")
+    debugFile = EV3File.OpenWrite(debugFilename)
+    redValues = Vector.Init(100000, 0)
+    blueValues = Vector.Init(100000, 0)
+    greenValues = Vector.Init(100000, 0)
+    LCD.Clear()
+    @debugReadIndex++
+  EndIf
+  
+  If Vmax <= 65 then
+    localKP = @kpMotorSlow
+    localKD = @kdMotorSlow
+  Else
+    localKP = @kpMotorFast
+    localKD = @kdMotorFast
+  EndIf
+  
+  localKE = @keMotor
+  
+  blueRead = 0
+  greenRead = 0
+  index = 0
+  
+  acceleration = "off"
+  deceleration = "off"
+  errorOld = 0
+  exitCondition = 1
+  cmToDeg(encoderCM, encoder)
+  
+  While exitCondition = 1
+    leftEncoder = Motor.GetCount(@leftMotor) * localKE
+    rightEncoder = Motor.GetCount(@rightMotor)
+    currentEncoder = (Math.Abs(leftEncoder) + Math.Abs(rightEncoder)) / 2
+    
+    colors = Sensor.ReadRaw(@rightReadSensor, 3)
+    
+    red = colors[0] / @maxRed * 100
+    green = colors[1] / @maxGreen * 100
+    blue = colors[2] / @maxBlue * 100
+    
+    maxColor = Math.Max(red, green)
+    maxColor = Math.Max(maxColor, blue)
+    minColor = Math.Min(red, green)
+    minColor = Math.Min(minColor, blue)
+    
+    If maxColor = minColor Then
+      hue = 0
+    Else
+      If maxColor = red Then
+        If green >= blue Then
+          hue = 60 * (green - blue) / (maxColor - minColor)
+        Else
+          hue = 60 * (green - blue) / (maxColor - minColor) + 360
+        EndIf
+      Else
+        If green = maxColor Then
+          hue = 60 * (blue - red) / (maxColor - minColor) + 120
+        Else
+          hue = 60 * (red - green) / (maxColor - minColor) + 240
+        EndIf
+      EndIf
+    EndIf
+    
+    If hue >= 221 then
+      blueRead++
+    Else
+      greenRead++
+    EndIf
+    
+    If Vmax < 0 Then
+      sens = -1
+    Else
+      sens = 1
+    EndIf
+    
+    If acceleration = "on" Then
+      V = (currentEncoder / @acceleratedEncoder) * (Vmax - @V0 * sens) + @V0 * sens
+      V = Math.Abs(V) * sens
+      
+      If Math.Abs(V) > Math.Abs(Vmax) Then
+        V = Vmax
+      EndIf
+      
+    ElseIf acceleration = "off" Then
+      V = Vmax
+    EndIf
+    
+    If deceleration = "on" Then
+      If encoder - currentEncoder < @deceleratedEncoder Then
+        V = ((encoder - currentEncoder) / @deceleratedEncoder) * (Vmax - @V0 * sens) + @V0 * sens
+        V = Math.Abs(V) * sens
+        
+        If Math.Abs(V) < Math.Abs(@V0 * sens) Then
+          V = @V0 * sens
+        EndIf
+      EndIf
+    EndIf
+    
+    If @debug = "on" Then
+      LCD.Write(10, 30, @V0 * sens)
+      LCD.Write(50, 30, V)
+      LCD.Update()
+    EndIf
+    
+    If @motorType = "large" Then
+      error =  rightEncoder - leftEncoder
+      P = @kpMotorSlow * error
+      D = @kdMotorSlow * (error - errorOld)
+      motorLeft =  V + (P + D)
+      MotorRight = V - (P + D)
+      
+      Motor.StartPower(@leftMotor, motorLeft)
+      Motor.StartPower(@rightMotor, motorRight)
+      
+      errorOld = error
+    Else
+      error = leftEncoder + rightEncoder
+      P = @kpMotorSlow * error
+      D = @kdMotorSlow * (error - errorOld)
+      motorLeft = (V + (P + D))
+      motorRight = V - (P + D)
+      
+      If (sens = 1 And motorLeft < 0) Or (sens = -1 And motorLeft > 0) Then
+        motorLeft = motorLeft * (-1)
+      EndIf
+      
+      If (sens = 1 And motorRight < 0) Or (sens = -1 And motorRight > 0) Then
+        motorRight = motorRight * (-1)
+      EndIf
+      
+      Motor.StartPower(@leftMotor, -motorLeft)
+      Motor.StartPower(@rightMotor, motorRight)
+      
+      errorOld = error
+    EndIf
+    
+    If Math.Abs(currentEncoder) > encoder Then
+      exitCondition = 0
+    EndIf
+    
+  EndWhile
+  
+  If endBrake = "on" Then
+    Motor.Stop(@stopString, "True")
+  EndIf
+  
+  If blueRead > greenRead Then
+    color = 2
+  Else
+    color = 3
   EndIf
   
   If @debug = "on" Then

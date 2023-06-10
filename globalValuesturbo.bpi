@@ -56,31 +56,31 @@
 @lfSensor = 1
 
 ' black - valoarea culorii negre de pe plansa
-@black = 15
+@black = 18
 
 ' white - valoarea culorii albe de pe plansa
-@white = 74
+@white = 86
 
 ' grey - valoarea intersectiei de culoare alb-negru. Folosit pentru a face line follower cu un singur senzor
 @grey = 17
 
 ' blue - valoarea culorii negre de pe plansa, citita cu RGB in albastru
-@blackB = 50
+@blackB = 55
 @blackBLF = 115
 
 ' V0 - viteza de start a oricarui algoritm de line follower / move sync; minim 10, dar poate fi mai mare
-@V0 = 25
+@V0 = 35
 
 ' Vmax - viteza la care trebuie sa ajunga maxim algoritmul de line follower / move sync; maxim 90
 @Vmax = 100
 
 ' kp_lf - valoarea optima de kp pentru algoritmul de line follower
-@kpSensorSlow = 0.7
+@kpSensorSlow = 0.9
 @kpSensorFast = 0.4
 @kpSensorMoor = 1.25
 
 ' kd_lf - valoarea optima de kd pentru algoritmul de line follower
-@kdSensorSlow = 1
+@kdSensorSlow = 1.2
 @kdSensorFast = 3
 @kdSensorMoor = 1.6
 
@@ -92,26 +92,34 @@
 @kiReadSensor = 0.001
 
 ' VALORI OPTIME DE KP, KD PENTRU ALGORITMUL DE arcMove2
-@kpArcMove = 5
-@kdArcMove = 1
+@kpArcMove = 10
+@kdArcMove = 0.5
+@keArcMoveLeft = 0.93
+@keArcMoveRight = 0.95
+
 
 @kpLFReadSensor = 1
 @kdLFReadSensor = 2
 
 ' kp_move_sync - valoarea optima de kp pentru algoritmul de move_sync
-@kpMotorSlow = 5
-@kpMotorFast = 6
+@kpMotorSlow = 3
+@kpMotorFast = 4
 @kpReverse = 2
 
 ' kd_move_sync - valoarea optima de kd pentru algoritmul de move_sync
 @kdMotorSlow = 1
-@kdMotorFast = 12
+@kdMotorFast = 2
 @kdReverse = 1
 
-@keMotor = 1.0005
+@keMotor = 1'.06
 
-@kpSpin = 3
-@kdSpin = 0
+@kpSpinLeft = 3
+@kdSpinLeft = 0
+
+@kpSpinRight = 5
+@kdSpinRight = 0
+
+@keSpin = 1'0.95
 
 ' urmatorii parametrii sunt inclusi direct in functia Rotation2Black_Line
 ' kp_rotation2black - valoarea optima de kp pentru algoritmul de rotire cu oprirea senzorilor la linia neagra
@@ -128,11 +136,11 @@
 
 ' AcceleratedEncoder - distanta (exprimate in grade de motor) pentru a accelera de la V0 la Vmax
 '                      valori uzuale : intre 50 si 150
-@acceleratedEncoder = 180
+@acceleratedEncoder = 150
 
 ' DeceleratedEncoder - distanta (exprimate in grade de motor) pentru a deccelera de la Vmax la V0
 '                      valori uzuale : intre 50 si 150
-@deceleratedEncoder = 180
+@deceleratedEncoder = 175
 
 '******************** Variabile folosite pentru brate, executie in thread paralel ******************
 
@@ -148,9 +156,9 @@
 '********************************* Variabile folosite pentru culori ********************************
 
 ' RGB max values
-@maxRed = 350
-@maxGreen = 252
-@maxBlue = 105
+@maxRed = 225
+@maxGreen = 249
+@maxBlue = 314
 
 '''''''''''''''''''''''''''''
 ''''' Constante globale '''''
@@ -169,13 +177,13 @@
 @timeToRead = 0.2
 
 ' General turning speed
-@turningSpeed = 70
+@turningSpeed = 60
 
 ' General precision speed
 @precisionSpeed = 30
 
 ' General cruising speed
-@cruisingSpeed = 85
+@cruisingSpeed = 80
 
 ' Precision turning speed
 @precisionTurningSpeed = 30
